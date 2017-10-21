@@ -3,7 +3,6 @@ library(lubridate)
 library(ggplot2)
 library(geosphere)
 
-options(lubridate.fasttime = TRUE)
 
 
 strava <- read.csv("strava_rides.csv")
