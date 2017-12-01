@@ -6,7 +6,7 @@ library(geosphere)
 options(lubridate.fasttime = TRUE)
 
 
-strava <- read.csv("strava_rides.csv")
+strava <- read.csv("strava/strava_rides.csv")
 strava <- filter(strava, Activity != "Hike")
 
 
@@ -29,6 +29,8 @@ ride_df <- mutate(ride_df, Timestamp = ymd_hms(Timestamp))
 
 #saveRDS(run_df, 'run_df.rds')
 saveRDS(ride_df, 'ride_df.rds')
+
+run_df <- readRDS('strava/run_df.rds')
 
 
 run_sumry <- run_df %>%
