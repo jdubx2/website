@@ -48,4 +48,6 @@ plot <- image_df2 %>%
 
 ggsave(file="24.svg", plot=plot, width=15, height=5)
 
-ggsave(file="24.png", plot=plot, bg='transparent', width=12, height=3)
+ggsave(file="24_2.png", plot=plot2, bg='transparent', width=5, height=5)
+
+plot2 <- plot + coord_polar()
