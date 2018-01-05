@@ -25,3 +25,5 @@ body {
 .navbar.compressed {
   padding: .5rem 1rem;
 }
+
+* {font-family: 'Open Sans', sans-serif !important;}

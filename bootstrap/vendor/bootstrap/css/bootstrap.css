@@ -5,7 +5,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 :root {
-  --blue: #007bff;
+  --blue: #007bff; /* #-007bff dodgerblue */
   --indigo: #6610f2;
   --purple: #6f42c1;
   --pink: #e83e8c;
@@ -17,7 +17,7 @@
   --cyan: #17a2b8;
   --white: #fff;
   --gray: #868e96;
-  --gray-dark: #343a40;
+  --gray-dark: #021C1E; /* #-343a40 */
   --primary: #007bff;
   --secondary: #868e96;
   --success: #28a745;
@@ -25,7 +25,7 @@
   --warning: #ffc107;
   --danger: #dc3545;
   --light: #f8f9fa;
-  --dark: #343a40;
+  --dark: #021C1E;
   --breakpoint-xs: 0;
   --breakpoint-sm: 576px;
   --breakpoint-md: 768px;
@@ -2511,8 +2511,8 @@ fieldset[disabled] a.btn {
 
 .btn-dark {
   color: #fff;
-  background-color: #343a40;
-  border-color: #343a40;
+  background-color: #021C1E;
+  border-color: #021C1E;
 }
 
 .btn-dark:hover {
@@ -2526,8 +2526,8 @@ fieldset[disabled] a.btn {
 }
 
 .btn-dark.disabled, .btn-dark:disabled {
-  background-color: #343a40;
-  border-color: #343a40;
+  background-color: #021C1E;
+  border-color: #021C1E;
 }
 
 .btn-dark:not([disabled]):not(.disabled):active, .btn-dark:not([disabled]):not(.disabled).active,
@@ -2749,16 +2749,16 @@ fieldset[disabled] a.btn {
 }
 
 .btn-outline-dark {
-  color: #343a40;
+  color: #021C1E;
   background-color: transparent;
   background-image: none;
-  border-color: #343a40;
+  border-color: #021C1E;
 }
 
 .btn-outline-dark:hover {
   color: #fff;
-  background-color: #343a40;
-  border-color: #343a40;
+  background-color: #021C1E;
+  border-color: #021C1E;
 }
 
 .btn-outline-dark:focus, .btn-outline-dark.focus {
@@ -2766,15 +2766,15 @@ fieldset[disabled] a.btn {
 }
 
 .btn-outline-dark.disabled, .btn-outline-dark:disabled {
-  color: #343a40;
+  color: #021C1E;
   background-color: transparent;
 }
 
 .btn-outline-dark:not([disabled]):not(.disabled):active, .btn-outline-dark:not([disabled]):not(.disabled).active,
 .show > .btn-outline-dark.dropdown-toggle {
   color: #fff;
-  background-color: #343a40;
-  border-color: #343a40;
+  background-color: #021C1E;
+  border-color: #021C1E;
   box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5);
 }
 
@@ -3601,8 +3601,8 @@ tbody.collapse.show {
       align-items: center;
   -ms-flex-pack: justify;
       justify-content: space-between;
-  padding: 1.3rem 1rem;
-  transition: all 0.4s;
+  padding: .6rem 1rem;
+  transition: all 0.5s;
 }
 
 .navbar > .container,
@@ -4075,7 +4075,11 @@ tbody.collapse.show {
 }
 
 .card-title {
+  color: #2C7873 !important;
   margin-bottom: 0.75rem;
+}
+.card-title:hover{
+  color: #004445 !important;
 }
 
 .card-subtitle {
@@ -4492,7 +4496,7 @@ tbody.collapse.show {
 
 .badge-dark {
   color: #fff;
-  background-color: #343a40;
+  background-color: #021C1E;
 }
 
 .badge-dark[href]:focus, .badge-dark[href]:hover {
@@ -5666,7 +5670,7 @@ button.close {
 }
 
 .bg-primary {
-  background-color: #007bff !important;
+  background-color: #007bff !important; /* #FINDTHIS */
 }
 
 a.bg-primary:focus, a.bg-primary:hover {
@@ -5722,7 +5726,7 @@ a.bg-light:focus, a.bg-light:hover {
 }
 
 .bg-dark {
-  background-color: #343a40 !important;
+  background-color: #021C1E !important;
 }
 
 a.bg-dark:focus, a.bg-dark:hover {
@@ -5790,7 +5794,7 @@ a.bg-dark:focus, a.bg-dark:hover {
 }
 
 .border-dark {
-  border-color: #343a40 !important;
+  border-color: #021C1E !important;
 }
 
 .border-white {
@@ -8347,7 +8351,7 @@ a.text-light:focus, a.text-light:hover {
 }
 
 .text-dark {
-  color: #343a40 !important;
+  color: #021C1E !important;
 }
 
 a.text-dark:focus, a.text-dark:hover {
