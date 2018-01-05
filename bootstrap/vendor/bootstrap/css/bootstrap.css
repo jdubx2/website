@@ -3601,7 +3601,7 @@ tbody.collapse.show {
       align-items: center;
   -ms-flex-pack: justify;
       justify-content: space-between;
-  padding: 1.1rem 1rem;
+  padding: 1.3rem 1rem;
   transition: all 0.4s;
 }
 
