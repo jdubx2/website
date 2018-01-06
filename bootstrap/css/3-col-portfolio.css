@@ -26,4 +26,33 @@ body {
   padding: .5rem 1rem;
 }
 
+.navlogo {
+  transition: all 0.5s;
+}
+
+.navbar-brand.compressed{
+  padding-top: .74rem;
+  padding-left: .6rem;
+  font-size: 1.1rem;
+}
+
+.nav-icon{
+  padding-top: .22rem;
+  padding-left: .9rem;
+  padding-right:.9rem;
+}
+
+.nav-icon-svg:hover path {
+  transition: all 0.1s;
+  fill: #BEBEBE;
+}
+.nav-icon-svg-li:hover path {
+  transition: all 0.1s;
+  fill: #0077b5;
+}
+.nav-icon-svg-gh:hover path {
+  transition: all 0.1s;
+  fill: #800080;
+}
+
 * {font-family: 'Open Sans', sans-serif !important;}

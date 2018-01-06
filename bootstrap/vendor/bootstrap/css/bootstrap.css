@@ -3601,7 +3601,7 @@ tbody.collapse.show {
       align-items: center;
   -ms-flex-pack: justify;
       justify-content: space-between;
-  padding: .6rem 1rem;
+  padding: .7rem 1rem;
   transition: all 0.5s;
 }
 
@@ -3617,7 +3617,7 @@ tbody.collapse.show {
       justify-content: space-between;
 }
 
-.navbar-brand {
+/* .navbar-brand {
   display: inline-block;
   padding-top: 0.3125rem;
   padding-bottom: 0.3125rem;
@@ -3625,6 +3625,18 @@ tbody.collapse.show {
   font-size: 1.25rem;
   line-height: inherit;
   white-space: nowrap;
+} */
+
+.navbar-brand {
+  display: inline-block;
+  padding-top: 1rem;
+  padding-left: .75rem;
+  padding-bottom: 0.3125rem;
+  margin-right: 1rem;
+  font-size: 1.25rem;
+  line-height: inherit;
+  white-space: nowrap;
+  transition: all 0.5s;
 }
 
 .navbar-brand:focus, .navbar-brand:hover {
@@ -6978,7 +6990,7 @@ a.bg-dark:focus, a.bg-dark:hover {
 .mt-4,
 .my-4 {
   margin-top: 1.5rem !important;
-  padding-top: 1.1rem;
+  padding-top: 1.6rem;
 }
 
 .mr-4,
