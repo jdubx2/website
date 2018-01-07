@@ -8,13 +8,12 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>jw.me</title>
+    <title>Jesse Weiss</title>
 
     <!-- Bootstrap core CSS -->
     <!-- <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
     <link href="vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
     <link href="css/3-col-portfolio.css" rel="stylesheet">
 
     <link href='css/mdb.css' rel='stylesheet'>
@@ -28,8 +27,8 @@
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-      <div class="container"> <img class ='navlogo' src ='img/logo.png' alt="", height = '65', width = '65'>
-        <a class="navbar-brand" href="#">jesseweiss.me</a>
+      <div class="container"> <img class ='navlogo' src ='img/logo.png' alt="", height = '55', width = '55'>
+        <a class="navbar-brand" href="#"><b>jesseweiss.me</b></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -72,32 +71,21 @@
 
     <!-- Page Content -->
     <div class="container">
-
+      <div class='lax'>
       <!-- Page Heading -->
-    <center><h1 class="my-4"><small>Welcome!<small><br /> I'm <b>Jesse</b> - analytics practitioner, data visualization enthusiast.</small></small></h1></center>
-
+      <div class = 'banner-space'></div>
+  <center><div class='welcome-banner' ><h1 class="my-4"><small>Welcome!<br /><small> I'm <b>Jesse</b> - analytics practitioner, data visualization enthusiast.</small>
+    </small></h1></div></center>
       <div class="row">
         <div class="col-lg-4 col-sm-6 portfolio-item">
           <div class="card h-100">
             <div class="view hm-zoom">
-            <a href="#"><img class="card-img-top img-fluid" src="img/naics_cover.png" alt=""></a></div>
+            <a href="#"><img class="card-img-top img-fluid" src="img/strava_cover.png" alt=""></a></div>
             <div class="card-body">
               <h4 class="card-title">
-                <a class="card-title" href="#">US Business Statistics</a>
+                <a class="card-title" href="#">Strava Exploration</a>
               </h4>
-              <p class="card-text">An interactive view of the census department's Statistics of US Businesses dataset. This project showcases D3.js on the front-end and leverages R Shiny for back-end data management.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-sm-6 portfolio-item">
-          <div class="card h-100">
-            <div class="view hm-zoom">
-            <a href="#"><img class="card-img-top img-fluid" src="img/ing_cover.png" alt=""></a></div>
-            <div class="card-body">
-              <h4 class="card-title">
-                <a class="card-title" href="#">Ingredient Networks</a>
-              </h4>
-              <p class="card-text">Analyzing a corpus of 30k+ beer recipes. This project utilizes python's webscraping capabilties to collect recipes from beermith.com. The corpus is then analyzed and visualized with R.</p>
+              <p class="card-text">This quantified-self analysis centers on five years of my running and biking data. Locations, durations, and elevations are analyzed using R and Tableau.</p>
             </div>
           </div>
         </div>
@@ -115,6 +103,18 @@
         </div>
         <div class="col-lg-4 col-sm-6 portfolio-item">
           <div class="card h-100">
+            <div class="view hm-zoom">
+            <a href="#"><img class="card-img-top img-fluid" src="img/naics_cover.png" alt=""></a></div>
+            <div class="card-body">
+              <h4 class="card-title">
+                <a class="card-title" href="#">US Business Statistics</a>
+              </h4>
+              <p class="card-text">An interactive view of the census department's Statistics of US Businesses dataset. This project showcases D3.js on the front-end and leverages R Shiny for back-end data management.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-sm-6 portfolio-item">
+          <div class="card h-100">
             <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
@@ -127,12 +127,12 @@
         <div class="col-lg-4 col-sm-6 portfolio-item">
           <div class="card h-100">
             <div class="view hm-zoom">
-            <a href="#"><img class="card-img-top img-fluid" src="img/strava_cover.png" alt=""></a></div>
+            <a href="#"><img class="card-img-top img-fluid" src="img/ing_cover.png" alt=""></a></div>
             <div class="card-body">
               <h4 class="card-title">
-                <a class="card-title" href="#">Strava Exploration</a>
+                <a class="card-title" href="#">Ingredient Networks</a>
               </h4>
-              <p class="card-text">This quantified-self analysis centers on five years of my running and biking data. Locations, durations, and elevations are analyzed using R and Tableau.</p>
+              <p class="card-text">Analyzing a corpus of 30k+ beer recipes. This project utilizes python's webscraping capabilties to collect recipes from beermith.com. The corpus is then analyzed and visualized with R.</p>
             </div>
           </div>
         </div>
@@ -174,7 +174,7 @@
           </a>
         </li>
       </ul> -->
-
+    </div>
     </div>
     <!-- /.container -->
 
@@ -187,10 +187,12 @@
     </footer>
 
     <!-- Bootstrap core JavaScript -->
+    <script src="vendor/bootstrap/js/parallax.min.js"></script>
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <script src="vendor/bootstrap/js/newjs.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
 
   </body>
 

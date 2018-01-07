@@ -3629,11 +3629,11 @@ tbody.collapse.show {
 
 .navbar-brand {
   display: inline-block;
-  padding-top: 1rem;
-  padding-left: .75rem;
+  padding-top: .8rem;
+  padding-left: .6rem;
   padding-bottom: 0.3125rem;
   margin-right: 1rem;
-  font-size: 1.25rem;
+  font-size: 1rem;
   line-height: inherit;
   white-space: nowrap;
   transition: all 0.5s;
@@ -6989,8 +6989,9 @@ a.bg-dark:focus, a.bg-dark:hover {
 
 .mt-4,
 .my-4 {
-  margin-top: 1.5rem !important;
-  padding-top: 1.6rem;
+  margin-top: .3rem !important;
+  padding-top: .3rem;
+  padding-bottom: .6rem;
 }
 
 .mr-4,
