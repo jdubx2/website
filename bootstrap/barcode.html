@@ -76,11 +76,20 @@
       <div class = 'banner-space'></div>
         <div class = 'text-input-box'>
           <h1 class='article_h1'><b>Barcode Remix</b>
+            <a style = 'float:right;' href='https://github.com/jdubx2' target="_blank"><div class = 'nav-icon'><svg class = 'nav-icon-svg-gh' xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path stroke="none" fill="black" d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            </div></a>
           <br /><span class = 'sub_span'>A circular take on the movie barcode</span></h1>
           <div class='customHr'>a</div>
-          <h2><b>Image Collection</b></h2>
-          <p>This is the barcode remix, here is where I'm going to write some stuff about
-            the barcode remix and talk about what I did. now im gonna hit a new line and this is great wow</p>
+          <h2><b>Preface</b></h2>
+          <p>In my (admittedly limited) experience, visualizing data is often a rather serious affair. Typically in the business world it involves
+          a handful of chart types, well labeled axes, and approved color palletes. While such rigor isn't necissarliy a bad thing, sometimes it's nice to be remined
+          that visualizing data can be more artistic than scientifc. The movie barcode is just that, an artistic data visualization that takes a failry large amount
+          of image data and represents it in an intuitive (and colorful) way.</p>
+          <p>In this project, I create a circular movie barcode for S1 E1 of the show 24. The final product displays the average color of 2,400 sequential scenes from the episode.</p>
+          <h2><b>Image Extraction</b></h2>
+          <p>There are a variety of ways to extract still images from media stored locally, but options are somewhat limited for streaming media (as was the case here).
+          To accomplish this task I decided to let the episode play through on a second monitor and automate the screen capture process with Python's Pillow library.
+          The loop below is all that was required to focus on the region of the screen that contained the video, take a screenshot every second, and save the images locally in chronological order.</p>
         </div>
           <div class='code-chunk'>
             <div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">
@@ -93,46 +102,14 @@
     img<span style="color: #666666">.</span>save(timestamp<span style="color: #666666">+</span><span style="color: #BB4444">&#39;.bmp&#39;</span>)
     sleep(<span style="color: #666666">1</span>)
 </pre>
-</div>
-</div>
+        </div>
+        </div>
+        <div class = 'img_box'>
+            <img  class='img_box_img' src = 'img/21_58_08.jpg'>
+            <img class = 'img_box_img' src = 'img/21_50_52.jpg'>
+            <img class = 'img_box_img' src = 'img/22_32_20.jpg'>
+        </div>
 
-          <div class = 'text-input-box'>
-            <h2><b>Image Processing</b></h2>
-            <p>This is the barcode remix, here is where I'm going to write some stuff about
-              the barcode remix and talk about what I did. now im gonna hit a new line and this is great wow</p>
-          </div>
-            <div class='code-chunk'>
-              <div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">
-  <span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">PIL</span> <span style="color: #AA22FF; font-weight: bold">import</span> ImageGrab
-  <span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">time</span> <span style="color: #AA22FF; font-weight: bold">import</span> gmtime, strftime, sleep
-
-  <span style="color: #AA22FF; font-weight: bold">while</span>(<span style="color: #AA22FF">True</span>):
-      img <span style="color: #666666">=</span> ImageGrab<span style="color: #666666">.</span>grab(bbox<span style="color: #666666">=</span>(<span style="color: #666666">45</span>,<span style="color: #666666">190</span>,<span style="color: #666666">430</span>,<span style="color: #666666">410</span>)) <span style="color: #008800; font-style: italic"># bbox = x,y,width,height</span>
-      timestamp <span style="color: #666666">=</span> strftime(<span style="color: #BB4444">&quot;%H_%M_%S&quot;</span>, gmtime())
-      img<span style="color: #666666">.</span>save(timestamp<span style="color: #666666">+</span><span style="color: #BB4444">&#39;.bmp&#39;</span>)
-      sleep(<span style="color: #666666">1</span>)
-  </pre>
-              </div>
-            </div>
-
-            <div class = 'text-input-box'>
-              <h2><b>Image Processing</b></h2>
-              <p>This is the barcode remix, here is where I'm going to write some stuff about
-                the barcode remix and talk about what I did. now im gonna hit a new line and this is great wow</p>
-            </div>
-              <div class='code-chunk'>
-                <div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">
-    <span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">PIL</span> <span style="color: #AA22FF; font-weight: bold">import</span> ImageGrab
-    <span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">time</span> <span style="color: #AA22FF; font-weight: bold">import</span> gmtime, strftime, sleep
-
-    <span style="color: #AA22FF; font-weight: bold">while</span>(<span style="color: #AA22FF">True</span>):
-        img <span style="color: #666666">=</span> ImageGrab<span style="color: #666666">.</span>grab(bbox<span style="color: #666666">=</span>(<span style="color: #666666">45</span>,<span style="color: #666666">190</span>,<span style="color: #666666">430</span>,<span style="color: #666666">410</span>)) <span style="color: #008800; font-style: italic"># bbox = x,y,width,height</span>
-        timestamp <span style="color: #666666">=</span> strftime(<span style="color: #BB4444">&quot;%H_%M_%S&quot;</span>, gmtime())
-        img<span style="color: #666666">.</span>save(timestamp<span style="color: #666666">+</span><span style="color: #BB4444">&#39;.bmp&#39;</span>)
-        sleep(<span style="color: #666666">1</span>)
-    </pre>
-                </div>
-              </div>
 
         </div>
     </div>

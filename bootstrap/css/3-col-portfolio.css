@@ -73,7 +73,7 @@ a, p, h1, h2 {font-family: 'Open Sans', sans-serif;}
 }
 .welcome-banner{
   background-color: #f8f8f8;
-  opacity: .8;
+  opacity: .6;
   border:inset gray;
   border-width:.03em .03em .03em .03em;
   margin-bottom: 2rem;
@@ -102,7 +102,7 @@ a, p, h1, h2 {font-family: 'Open Sans', sans-serif;}
   padding-left: .6rem;
   padding-right: .6rem;
   padding-top:.6rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 .article_h1{
   /* padding-bottom: 1.3rem; */
@@ -117,7 +117,7 @@ a, p, h1, h2 {font-family: 'Open Sans', sans-serif;}
   width: 85%;
   opacity: 1;
   font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace !important;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 .customHr {
     width: 95%
@@ -128,4 +128,16 @@ a, p, h1, h2 {font-family: 'Open Sans', sans-serif;}
     background-color: grey;
     margin-top: 5px;
     margin-bottom: 10px;
+}
+.img_box{
+  margin: auto;
+  width: 85%;
+  margin-bottom: 1rem;
+  /* justify-content: center;
+  display: flex; */
+  padding-left: 7px;
+}
+.img_box_img{
+  width: 32.4%;
+  margin: auto;
 }
