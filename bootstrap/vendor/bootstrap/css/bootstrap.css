@@ -3638,6 +3638,7 @@ tbody.collapse.show {
   line-height: inherit;
   white-space: nowrap;
   transition: all 0.5s;
+  color: #f5f5f5
 }
 
 .navbar-brand:focus, .navbar-brand:hover {
@@ -4060,7 +4061,7 @@ tbody.collapse.show {
       flex-direction: column;
   min-width: 0;
   word-wrap: break-word;
-  background-color: #f8f8f8;
+  background-color: #f5f5f5;
   background-clip: border-box;
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem;
