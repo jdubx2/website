@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import gpxpy
 
+# Function to parse individual GPX files
 def parseGPX(file):
     pointlist = []
     with open(file, 'r') as gpxfile:
@@ -25,7 +26,8 @@ def parseGPX(file):
                             }
                     pointlist.append(dict)
     return pointlist
-	
+
+# Call parseGPX on each file and append to dataframe
 gpx_dir = r'D:\strava\strava_rides'
 files = os.listdir(gpx_dir)
 os.chdir(gpx_dir)

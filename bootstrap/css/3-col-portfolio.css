@@ -152,3 +152,17 @@ a, p, h1, h2 {font-family: 'Open Sans', sans-serif;}
   border:inset gray;
   border-width:.05em .05em .05em .05em;
 }
+.gmisc_table{
+  background-color: #211e1e;
+  width: 100%;
+  color: white;
+  border:solid gray;
+  border-width:.1em .1em .1em .8em;
+  font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace !important;
+}
+.gmisc_table th{
+  font-weight: bold;
+}
+.gmisc_table tr:nth-child(even){
+  background-color: #303030;
+}

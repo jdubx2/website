@@ -2,16 +2,16 @@ library(dplyr)
 library(lubridate)
 library(ggplot2)
 library(geosphere)
+library(ggthemes)
+library(extrafont)
 
 
-
-strava <- read.csv("strava/strava_rides.csv")
+strava <- read.csv("D:/strava/strava_rides.csv")
 strava <- filter(strava, Activity != "Hike")
 
 
-
-
 strava <- strava %>%
+  filter(Activity %in% c('Run', 'Ride')) %>% 
   group_by(File) %>%
   mutate(long2 = ifelse(is.na(lag(Longitude)),Longitude,lag(Longitude)), 
          lat2 = ifelse(is.na(lag(Latitude)),Latitude,lag(Latitude))) %>%
@@ -19,46 +19,43 @@ strava <- strava %>%
   mutate(dist = geosphere::distHaversine( c(Longitude, Latitude), 
                                           c(long2, lat2)))
 
+strava_final <- mutate(strava, Timestamp = ymd_hms(Timestamp))
 
-run_df <- filter(strava, Activity == 'Run')
-ride_df <- filter(strava, Activity == 'Ride')
+saveRDS(strava_final, 'strava_final.rds')
 
-run_df <- mutate(run_df, Timestamp = ymd_hms(Timestamp))
-ride_df <- mutate(ride_df, Timestamp = ymd_hms(Timestamp))
+#------------------------------------------------------------------------#
 
-#saveRDS(run_df, 'run_df.rds')
-saveRDS(ride_df, 'ride_df.rds')
+strava <- readRDS('strava_final.rds')
 
-run_df <- readRDS('strava/run_df.rds')
-
-
-run_sumry <- run_df %>%
-  group_by(File) %>%
-  summarise(dist = sum(dist) / 1609.34,
+summary <- strava %>%
+  group_by(File, Activity) %>%
+  summarise(miles = sum(dist) / 1609.34,
             start = min(Timestamp),
             end = max(Timestamp),
-            mins = end - start,
+            mins = as.numeric(difftime(end, start, units = 'mins')),
             hrs = as.numeric(mins) / 60,
-            mph = dist/hrs)
+            mph = miles/hrs)
 
-run_sumry %>%
-  filter(mph < 200) %>%
-  ggplot(aes(x = dist, y = mins)) +
-  geom_point()
+ride_ols <- summary(lm(hrs ~ miles, data = filter(summary, Activity == 'Ride')))
+run_ols <- summary(lm(hrs ~ miles, data = filter(summary, Activity == 'Run')))
+rsq_df <- data.frame(Act = c('Ride','Run'), rsq = c(round(ride_ols$r.squared,2),round(run_ols$r.squared,2)),
+                     x = c(45,23), y = c(4.5,4.7))
 
+scatter <- summary %>% 
+  ggplot(aes(x = miles, y = hrs))+
+  geom_point(aes(fill = Activity), shape = 21, size = 2, alpha = .6, color = '#211e1e') +
+  geom_line(aes(color = Activity), method = 'lm', stat = 'smooth', size = .5, linetype='dashed', alpha = .9) +
+  geom_text(data = rsq_df, aes(x = x, y = y, label = paste0('R² ',rsq), color = Act), 
+            family = 'Calibri', fontface = 'bold', size = 2) +
+  scale_fill_manual(values = c('dodgerblue','orangered')) +
+  scale_color_manual(values = c('dodgerblue','orangered')) +
+  scale_x_continuous(limits = c(0,50)) +
+  theme_hc(bgcolor = "darkunica") +
+  theme(axis.text = element_text(color='gray80'),
+        panel.grid.major.y = element_line(color='gray25', size = .3),
+        panel.grid.major.x = element_line(color='gray25', size = .3),
+        text = element_text(family ='Calibri',size = 11),
+        panel.background = element_rect(fill = '#211e1e', color = '#211e1e'),
+        plot.background = element_rect(fill = '#211e1e', color = '#211e1e'))
 
-run_df <- run_df %>%
-  group_by(File) %>%
-  mutate(run_prof = dist - ifelse(is.na(lag(dist)), 0 , lag(dist)))
-
-run_df %>%
-  filter(run_prof >= -1 & run_prof <= 1) %>%
-  group_by(X) %>%
-  summarise(run_prof = mean(run_prof)) %>%
-  ggplot() +
-  geom_smooth(aes(x = X, y = run_prof), span = .1, method = 'loess')
-
-
-strava_smry %>%
-  group_by(Activity, File) %>%
-  summarise()
+ggsave(file="strava_scat.svg", plot=scatter, width=7, height=3)
