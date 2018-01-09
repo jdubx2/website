@@ -3,6 +3,11 @@
  * Copyright 2013-2017 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-3-col-portfolio/blob/master/LICENSE)
  */
+ /*
+ syntax highligher - http://markup.su/highlighter/
+ R - pastels on dark
+ Py - sunburst w/ #211e1e; background change
+ */
 
 body {
   padding-top: 54px;
@@ -93,7 +98,7 @@ a, p, h1, h2 {font-family: 'Open Sans', sans-serif;}
   z-index: 1;
 }
 .text-input-box{
-  background-color: #f5f5f5;
+  background-color: #f8f8f8;
   width:85%;
   margin: auto;
   opacity: 1;
@@ -118,6 +123,11 @@ a, p, h1, h2 {font-family: 'Open Sans', sans-serif;}
   opacity: 1;
   font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace !important;
   margin-bottom: 1rem;
+  background-color: #211e1e;
+  overflow:hidden;
+  border:solid gray;
+  border-width:.1em .1em .1em .8em;
+  padding:.2em .6em;"
 }
 .customHr {
     width: 95%
@@ -135,9 +145,10 @@ a, p, h1, h2 {font-family: 'Open Sans', sans-serif;}
   margin-bottom: 1rem;
   /* justify-content: center;
   display: flex; */
-  padding-left: 7px;
 }
 .img_box_img{
-  width: 32.4%;
-  margin: auto;
+  margin-right: -3px !important;
+  width: 33.3%;
+  border:inset gray;
+  border-width:.05em .05em .05em .05em;
 }

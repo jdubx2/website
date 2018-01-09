@@ -81,37 +81,100 @@
           <br /><span class = 'sub_span'>A circular take on the movie barcode</span></h1>
           <div class='customHr'>a</div>
           <h2><b>Preface</b></h2>
-          <p>In my (admittedly limited) experience, visualizing data is often a rather serious affair. Typically in the business world it involves
-          a handful of chart types, well labeled axes, and approved color palletes. While such rigor isn't necissarliy a bad thing, sometimes it's nice to be remined
-          that visualizing data can be more artistic than scientifc. The movie barcode is just that, an artistic data visualization that takes a failry large amount
+          <p>In my experience, visualizing data is often a rather serious affair. Typically in the business world it involves
+          well labeled axes, approved color palletes, and just a handful of chart types. While such rigor isn't necissarliy a bad thing, sometimes it's nice to be remined
+          that visualizing data can be just as artistic as it is scientifc. The movie barcode is just that, an artistic data visualization that takes a failry large amount
           of image data and represents it in an intuitive (and colorful) way.</p>
-          <p>In this project, I create a circular movie barcode for S1 E1 of the show 24. The final product displays the average color of 2,400 sequential scenes from the episode.</p>
+          <p>In this project, I create a circular movie barcode for S1 E1 of the show 24. The final product showcases the average color of 2,400 sequential scenes from the episode.</p>
           <h2><b>Image Extraction</b></h2>
           <p>There are a variety of ways to extract still images from media stored locally, but options are somewhat limited for streaming media (as was the case here).
-          To accomplish this task I decided to let the episode play through on a second monitor and automate the screen capture process with Python's Pillow library.
-          The loop below is all that was required to focus on the region of the screen that contained the video, take a screenshot every second, and save the images locally in chronological order.</p>
+          To accomplish this task I decided to let the episode play through on a second monitor and automate the screen capture process with Python's <a target="_blank" href='https://github.com/python-pillow/Pillow'><u>Pillow</u></a> library.
+          The loop below is all that was required to focus on the region of the screen that contained the video, take a screenshot every second, and save the images locally with chronological labels.</p>
         </div>
           <div class='code-chunk'>
-            <div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">
-<span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">PIL</span> <span style="color: #AA22FF; font-weight: bold">import</span> ImageGrab
-<span style="color: #AA22FF; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">time</span> <span style="color: #AA22FF; font-weight: bold">import</span> gmtime, strftime, sleep
+<pre style="background:#211e1e;color:#f8f8f8"><span style="color:#e28964">from</span> PIL <span style="color:#e28964">import</span> ImageGrab
 
-<span style="color: #AA22FF; font-weight: bold">while</span>(<span style="color: #AA22FF">True</span>):
-    img <span style="color: #666666">=</span> ImageGrab<span style="color: #666666">.</span>grab(bbox<span style="color: #666666">=</span>(<span style="color: #666666">45</span>,<span style="color: #666666">190</span>,<span style="color: #666666">430</span>,<span style="color: #666666">410</span>)) <span style="color: #008800; font-style: italic"># bbox = x,y,width,height</span>
-    timestamp <span style="color: #666666">=</span> strftime(<span style="color: #BB4444">&quot;%H_%M_%S&quot;</span>, gmtime())
-    img<span style="color: #666666">.</span>save(timestamp<span style="color: #666666">+</span><span style="color: #BB4444">&#39;.bmp&#39;</span>)
-    sleep(<span style="color: #666666">1</span>)
+<span style="color:#aeaeae;font-style:italic">#take a screen shot every 1s and save image w/ timestamp</span>
+<span style="color:#e28964">while</span>(<span style="color:#3387cc">True</span>):
+    img <span style="color:#e28964">=</span> ImageGrab.grab(<span style="color:#3e87e3">bbox</span><span style="color:#e28964">=</span>(<span style="color:#3387cc">45</span>,<span style="color:#3387cc">190</span>,<span style="color:#3387cc">430</span>,<span style="color:#3387cc">410</span>)) <span style="color:#aeaeae;font-style:italic"># bbox = x,y,width,height</span>
+    timestamp <span style="color:#e28964">=</span> strftime(<span style="color:#65b042">"<span style="color:#ddf2a4">%H</span>_<span style="color:#ddf2a4">%M</span>_<span style="color:#ddf2a4">%S</span>"</span>, gmtime())
+    img.save(timestamp<span style="color:#e28964">+</span><span style="color:#65b042">'.bmp'</span>)
+    sleep(<span style="color:#3387cc">1</span>)
 </pre>
         </div>
-        </div>
         <div class = 'img_box'>
-            <img  class='img_box_img' src = 'img/21_58_08.jpg'>
+            <img class = 'img_box_img' src = 'img/21_58_08.jpg'>
             <img class = 'img_box_img' src = 'img/21_50_52.jpg'>
             <img class = 'img_box_img' src = 'img/22_32_20.jpg'>
         </div>
-
-
+        <div class = 'text-input-box'>
+          <h2><b>Image Processing</b></h2>
+          <p>Now that we have our collection of frames saved as .bmp images, I'll use R's bmp library to process the images and prepare them for plotting.
+            There are a variety of methods to process image data but I've taken the simple approach of averaging the red, green and blue values in each image and saving
+            the resulting "mean" RGB color code. I'll make a quick density plot of the component colors to check the distribution of these values.</p>
         </div>
+        <div class = 'code-chunk'>
+<pre style="background:#211e1e;color:#dadada"><span style="color:#555">#extract RGB from images in working directory and record mean values in dataframe</span>
+<span style="color:#c1c144">image_list</span> <span style="color:#47b8d6">&lt;-</span> list()
+<span style="color:#6969fa;font-weight:700">for</span>(<span style="color:#c1c144">idx</span> <span style="color:#6969fa;font-weight:700">in</span> seq_along(list.files())) {
+
+  <span style="color:#c1c144">image</span> <span style="color:#47b8d6">&lt;-</span> read.bmp(list.files()[<span style="color:#c1c144">idx</span>])
+  <span style="color:#c1c144">image_list</span>[[<span style="color:#c1c144">idx</span>]] <span style="color:#47b8d6">&lt;-</span> data.frame(<span style="color:#c1c144">red</span> <span style="color:#47b8d6">=</span> round(mean(<span style="color:#c1c144">image</span>[,,<span style="color:#ccc">1</span>]),<span style="color:#ccc">0</span>),
+                                  <span style="color:#c1c144">green</span> <span style="color:#47b8d6">=</span> round(mean(<span style="color:#c1c144">image</span>[,,<span style="color:#ccc">2</span>]),<span style="color:#ccc">0</span>),
+                                  <span style="color:#c1c144">blue</span> <span style="color:#47b8d6">=</span> round(mean(<span style="color:#c1c144">image</span>[,,<span style="color:#ccc">3</span>]),<span style="color:#ccc">0</span>))
+}
+<span style="color:#c1c144">image_df</span> <span style="color:#47b8d6">&lt;-</span> bind_rows(<span style="color:#c1c144">image_list</span>)
+</pre>
+        </div>
+        <div class = 'img_box'>
+          <img style = 'width:100%' src = 'img/24_dens.svg'>
+        </div>
+        <div class = 'text-input-box'>
+          <h2><b>Image Processing cont.</b></h2>
+          <p>A reasonable looking density plot. Looks like each color is distributed somewhat normally with all component values skewing darker (closer to zero)
+          which is to be expected. On to the main event!</p><p>For the barcode plot we will need to covert the RGB values to hex codes and create a custom color
+          pallette to fill in the bars that will be generated for each frame. we'll then genreate two plots - a standard rectangular barcode, and a circular barcode using
+          ggplot's built in polar coordinate system.</p>
+        </div>
+        <div class = 'code-chunk'>
+<pre style="background:#211e1e;color:#dadada"><span style="color:#555">#convert rgb to hex &amp; add row number for x-axis ordering</span>
+<span style="color:#c1c144">image_df2</span> <span style="color:#47b8d6">&lt;-</span> <span style="color:#c1c144">image_df</span> %<span style="color:#47b8d6">></span>%
+  mutate(<span style="color:#c1c144">hex</span> <span style="color:#47b8d6">=</span> rgb(<span style="color:#c1c144">red</span><span style="color:#47b8d6">/</span><span style="color:#ccc">255</span>,<span style="color:#c1c144">green</span><span style="color:#47b8d6">/</span><span style="color:#ccc">255</span>,<span style="color:#c1c144">blue</span><span style="color:#47b8d6">/</span><span style="color:#ccc">255</span>),
+         <span style="color:#c1c144">row_num</span> <span style="color:#47b8d6">=</span> row_number())
+
+<span style="color:#555">#create hex lookup array for plotting</span>
+<span style="color:#c1c144">col</span> <span style="color:#47b8d6">&lt;-</span> as.character(<span style="color:#c1c144">image_df2</span><span style="color:#a1a1ff">$</span><span style="color:#c1c144">hex</span>)
+names(<span style="color:#c1c144">col</span>) <span style="color:#47b8d6">&lt;-</span> as.character(<span style="color:#c1c144">image_df2</span><span style="color:#a1a1ff">$</span><span style="color:#c1c144">hex</span>)
+
+<span style="color:#555">#plot barcode</span>
+<span style="color:#c1c144">plot</span> <span style="color:#47b8d6">&lt;-</span> <span style="color:#c1c144">image_df2</span> %<span style="color:#47b8d6">></span>%
+  ggplot(aes(<span style="color:#c1c144">x</span> <span style="color:#47b8d6">=</span> <span style="color:#c1c144">row_num</span>, <span style="color:#c1c144">y</span> <span style="color:#47b8d6">=</span> <span style="color:#ccc">1</span>, <span style="color:#c1c144">fill</span> <span style="color:#47b8d6">=</span> <span style="color:#c1c144">hex</span>, <span style="color:#c1c144">color</span> <span style="color:#47b8d6">=</span> <span style="color:#c1c144">hex</span>))<span style="color:#47b8d6">+</span>
+  geom_col()<span style="color:#47b8d6">+</span>
+  scale_fill_manual(<span style="color:#c1c144">values</span> <span style="color:#47b8d6">=</span> <span style="color:#c1c144">col</span>) <span style="color:#47b8d6">+</span>
+  scale_color_manual(<span style="color:#c1c144">values</span> <span style="color:#47b8d6">=</span> <span style="color:#c1c144">col</span>) <span style="color:#47b8d6">+</span>
+  guides(<span style="color:#c1c144">color</span>=<span style="color:#de8e30;font-weight:700">F</span>,<span style="color:#c1c144">fill</span>=<span style="color:#de8e30;font-weight:700">F</span>) <span style="color:#47b8d6">+</span>
+  theme_void()
+
+<span style="color:#555">#plot circular barcode using polar coordinates</span>
+<span style="color:#c1c144">plot2</span> <span style="color:#47b8d6">&lt;-</span> <span style="color:#c1c144">plot</span> <span style="color:#47b8d6">+</span> coord_polar()
+</pre>
+        </div>
+        <div class = img_box>
+            <img style = 'width:100%' src = 'img/24_barcodes.png'>
+        </div>
+        <div class = 'text-input-box'>
+          <h2><b>Post Processing</b></h2>
+          <p>Pretty cool, but we can't stop here! This is an art project after all. Now it's time to import these barcodes into a vector graphics
+          editor and get a little creative. I'm using Inkscape but I'm sure similar results could be achieved in Illustrator or something else.
+          After playing around a little bit I decided to create a circular clock-like object with 24 imposed in the middle. I think this could be even
+          cooler if it contained all 24 episodes of season 1 aligned on the corresponding clock positions but that will have to wait until next time! </p>
+        </div>
+        <div class = img_box>
+            <img style = 'width:100%' src = 'img/24_3.png'>
+        </div>
+
+
+    </div>
     </div>
     <!-- /.container -->
 
