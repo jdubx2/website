@@ -4,6 +4,7 @@ library(ggplot2)
 library(geosphere)
 library(ggthemes)
 library(extrafont)
+library(tidyr)
 
 
 strava <- read.csv("D:/strava/strava_rides.csv")
@@ -23,9 +24,13 @@ strava_final <- mutate(strava, Timestamp = ymd_hms(Timestamp))
 
 saveRDS(strava_final, 'strava_final.rds')
 
+library(htmlTable)
+head(strava[-1]) %>% htmlTable
+
 #------------------------------------------------------------------------#
 
 strava <- readRDS('D:/strava/strava_final.rds')
+strava <- readRDS('strava_final.rds')
 
 strava <- strava %>% 
   group_by(File) %>% 
@@ -43,7 +48,9 @@ summary <- strava %>%
             end = max(Timestamp),
             mins = as.numeric(difftime(end, start, units = 'mins')),
             hrs = as.numeric(mins) / 60,
-            mph = miles/hrs)
+            mph = miles/hrs,
+            elev_gain = sum(elev_chg[elev_chg > 0]),
+            elev_loss = sum(elev_chg[elev_chg < 0]))
 
 ride_ols <- summary(lm(hrs ~ miles, data = filter(summary, Activity == 'Ride')))
 run_ols <- summary(lm(hrs ~ miles, data = filter(summary, Activity == 'Run')))
@@ -72,19 +79,40 @@ scatter <- summary %>%
 ggsave(file="strava_scat.svg", plot=scatter, width=7, height=2.5)
 
 
-strava %>% 
-  filter(elev_chg > -2, elev_chg < 2) %>% 
-  ggplot(aes(x = elev_chg, fill = Activity)) +
-  geom_histogram(bins = 60) +
-  facet_grid(Activity ~ ., scales = 'free')
+summary %>% 
+  select(File, Activity, elev_gain, elev_loss) %>% 
+  gather(type, value, -c(File,Activity)) %>% 
+  ggplot(aes(x = Activity, y = value, color = Activity)) +
+  geom_violin()
 
-strava %>%
-  filter(elev_chg>-1 & elev_chg < 1) %>% 
-  filter(Activity == 'Run') %>% 
-  ggplot(aes(x = waypoint, y = elev_chg, group = File))+
-  geom_smooth()
+summary %>% 
+  mutate(year = year(start),
+         month = ifelse(month(start) %%3 != 0, 3 - month(start)%%3 + month(start), month(start)),
+         yrmo = ymd(paste(year,month,'01', sep = '-'))) %>% 
+  group_by(yrmo, Activity) %>% 
+  summarise(miles = sum(miles)) %>% 
+  filter(yrmo != ymd('2017-12-01')) %>% 
+  ggplot(aes(x = yrmo, y = miles)) +
+  geom_line(aes(color = Activity), alpha = .9) +
+  geom_point(aes(fill = Activity), shape = 21, color = '#211e1e', stroke = .1, size = 1, alpha = .9) +
+  scale_y_continuous(limits = c(0,400)) +
+  scale_color_manual(values = c('deepskyblue2','darkolivegreen2')) +
+  scale_fill_manual(values = c('deepskyblue2','darkolivegreen2')) +
+  labs(x = '', y = 'Miles Travelled') +
+  scale_x_date(date_breaks = '3 months', expand = c(0,0),
+               labels = function(x) ifelse(month(x) == 3, paste0('Q1\n',year(x)),
+                                                                     ifelse(month(x) == 6, 'Q2',
+                                                                            ifelse(month(x) == 9, 'Q3','Q4')))) +
+  theme_hc(bgcolor = "darkunica") +
+  theme(axis.text = element_text(color='gray80'),
+        panel.grid.major.y = element_line(color='gray25', size = .3),
+        panel.grid.major.x = element_line(color='gray25', size = .3),
+        text = element_text(family ='Calibri',size = 11),
+        panel.background = element_rect(fill = '#211e1e', color = '#211e1e'),
+        plot.background = element_rect(fill = '#211e1e', color = '#211e1e'),
+        plot.margin = margin(.2, .5, .1, .1, "cm")) +
+  guides(color = F, fill = F)
 
-strava %>%
-  filter(Activity == 'Run') %>%
-  ggplot(aes(x = waypoint, y = power)) +
-  geom_smooth()
+
+weird <- filter(strava, time_chg > 1)
+check <- filter(strava, File == '20150815-214909-Ride.gpx')
