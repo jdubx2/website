@@ -55,10 +55,10 @@ rsq_df <- data.frame(Act = c('Ride','Run'), rsq = c(round(ride_ols$r.squared,2),
 
 scatter <- summary %>% 
   ggplot(aes(x = miles, y = hrs))+
-  geom_point(aes(fill = Activity), shape = 21, size = 1.5, alpha = .8, color = '#211e1e', stroke = .1) +
+  geom_point(aes(fill = Activity), shape = 21, size = 1, alpha = .8, color = '#211e1e', stroke = .1) +
   geom_line(aes(color = Activity), method = 'lm', stat = 'smooth', size = .4, linetype='dashed', alpha = .8) +
   geom_text(data = rsq_df, aes(x = x, y = y, label = paste0(Act,'s\n R² ',rsq), color = Act), 
-            family = 'Calibri', fontface = 'bold', size = 3) +
+            family = 'Calibri', fontface = 'bold', size = 2.5) +
   scale_fill_manual(values = c('deepskyblue2','darkolivegreen2')) +
   scale_color_manual(values = c('deepskyblue2','darkolivegreen2')) +
   scale_x_continuous(limits = c(0,50), expand = c(.01,.01)) +
@@ -66,14 +66,14 @@ scatter <- summary %>%
   theme(axis.text = element_text(color='gray80'),
         panel.grid.major.y = element_line(color='gray25', size = .3),
         panel.grid.major.x = element_line(color='gray25', size = .3),
-        text = element_text(family ='Calibri',size = 11),
+        text = element_text(family ='Calibri',size = 9),
         panel.background = element_rect(fill = '#211e1e', color = '#211e1e'),
         plot.background = element_rect(fill = '#211e1e', color = '#211e1e'),
         plot.margin = margin(.2, .5, .1, .1, "cm")) +
   guides(fill = F, color = F) +
   labs(x = 'Miles Travelled', y = 'Hours')
 
-ggsave(file="strava_scat.svg", plot=scatter, width=7, height=2.5)
+ggsave(file="strava_scat.svg", plot=scatter, width=3.5, height=2.5)
 
 
 violin <- summary %>% 
@@ -90,7 +90,7 @@ violin <- summary %>%
           text = element_text(family ='Calibri',size = 9),
           panel.background = element_rect(fill = '#211e1e', color = '#211e1e'),
           plot.background = element_rect(fill = '#211e1e', color = '#211e1e'),
-          plot.margin = margin(.2, .5, 0, .1, "cm")) +
+          plot.margin = margin(.1, .5, 0, .1, "cm")) +
     guides(color = F, fill = F) +
     labs(x = '', y = 'Average Elevation Gain/Loss (Meters)')
 
@@ -132,3 +132,23 @@ ggsave(file="strava_lines.svg", plot=lines, width=3.5, height=2.5)
 
 weird <- filter(strava, time_chg > 1)
 check <- filter(strava, File == '20150815-214909-Ride.gpx')
+
+
+box <- summary %>% 
+  ggplot(aes(x = Activity, y = mph, fill = Activity)) +
+    geom_boxplot(color = 'gray25', alpha = .9, outlier.colour = NULL, outlier.shape = 21, outlier.size = 1) +
+    scale_fill_manual(values = c('deepskyblue2','darkolivegreen2')) +
+    scale_y_continuous(limits = c(0,20), breaks = seq(0,18,3)) +
+    theme_hc(bgcolor = "darkunica") +
+    theme(axis.text = element_text(color='gray80'),
+          panel.grid.major.y = element_line(color='gray25', size = .3),
+          panel.grid.major.x = element_blank(),
+          text = element_text(family ='Calibri',size = 9),
+          panel.background = element_rect(fill = '#211e1e', color = '#211e1e'),
+          plot.background = element_rect(fill = '#211e1e', color = '#211e1e'),
+          legend.background = element_rect(fill = '#211e1e', color = '#211e1e'),
+          plot.margin = margin(0, .5, 0, .1, "cm")) +
+    guides(fill = F) +
+  labs(y = 'Average MPH',x = '')
+
+ggsave(file="strava_box.svg", plot=box, width=3.5, height=2.5)
