@@ -24,9 +24,6 @@ strava_final <- mutate(strava, Timestamp = ymd_hms(Timestamp))
 
 saveRDS(strava_final, 'strava_final.rds')
 
-library(htmlTable)
-head(strava[-1]) %>% htmlTable
-
 #------------------------------------------------------------------------#
 
 strava <- readRDS('D:/strava/strava_final.rds')
