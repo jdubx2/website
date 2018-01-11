@@ -146,9 +146,15 @@ a, p, h1, h2 {font-family: 'Open Sans', sans-serif;}
   /* justify-content: center;
   display: flex; */
 }
-.img_box_img{
+.img_box_img3{
   margin-right: -3px !important;
   width: 33.3%;
+  border:inset gray;
+  border-width:.05em .05em .05em .05em;
+}
+.img_box_img2{
+  margin-right: -3px !important;
+  width: 50%;
   border:inset gray;
   border-width:.05em .05em .05em .05em;
 }

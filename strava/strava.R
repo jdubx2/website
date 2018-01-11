@@ -26,7 +26,6 @@ saveRDS(strava_final, 'strava_final.rds')
 
 #------------------------------------------------------------------------#
 
-strava <- readRDS('D:/strava/strava_final.rds')
 strava <- readRDS('strava_final.rds')
 
 strava <- strava %>% 
@@ -56,8 +55,8 @@ rsq_df <- data.frame(Act = c('Ride','Run'), rsq = c(round(ride_ols$r.squared,2),
 
 scatter <- summary %>% 
   ggplot(aes(x = miles, y = hrs))+
-  geom_point(aes(fill = Activity), shape = 21, size = 1.5, alpha = .6, color = '#211e1e', stroke = .1) +
-  geom_line(aes(color = Activity), method = 'lm', stat = 'smooth', size = .4, linetype='dashed', alpha = .9) +
+  geom_point(aes(fill = Activity), shape = 21, size = 1.5, alpha = .8, color = '#211e1e', stroke = .1) +
+  geom_line(aes(color = Activity), method = 'lm', stat = 'smooth', size = .4, linetype='dashed', alpha = .8) +
   geom_text(data = rsq_df, aes(x = x, y = y, label = paste0(Act,'s\n R² ',rsq), color = Act), 
             family = 'Calibri', fontface = 'bold', size = 3) +
   scale_fill_manual(values = c('deepskyblue2','darkolivegreen2')) +
@@ -69,20 +68,35 @@ scatter <- summary %>%
         panel.grid.major.x = element_line(color='gray25', size = .3),
         text = element_text(family ='Calibri',size = 11),
         panel.background = element_rect(fill = '#211e1e', color = '#211e1e'),
-        plot.background = element_rect(fill = '#211e1e', color = '#211e1e')) +
+        plot.background = element_rect(fill = '#211e1e', color = '#211e1e'),
+        plot.margin = margin(.2, .5, .1, .1, "cm")) +
   guides(fill = F, color = F) +
   labs(x = 'Miles Travelled', y = 'Hours')
 
 ggsave(file="strava_scat.svg", plot=scatter, width=7, height=2.5)
 
 
-summary %>% 
+violin <- summary %>% 
   select(File, Activity, elev_gain, elev_loss) %>% 
   gather(type, value, -c(File,Activity)) %>% 
-  ggplot(aes(x = Activity, y = value, color = Activity)) +
-  geom_violin()
+  ggplot(aes(x = Activity, y = value, fill = Activity)) +
+    geom_violin(alpha = .8, color = 'gray25') +
+    scale_fill_manual(values = c('deepskyblue2','darkolivegreen2')) +
+    theme_hc(bgcolor = "darkunica") +
+    scale_y_continuous(breaks = seq(-1000,1000,250)) +
+    theme(axis.text = element_text(color='gray80'),
+          panel.grid.major.y = element_line(color='gray25', size = .3),
+          panel.grid.major.x = element_blank(),
+          text = element_text(family ='Calibri',size = 9),
+          panel.background = element_rect(fill = '#211e1e', color = '#211e1e'),
+          plot.background = element_rect(fill = '#211e1e', color = '#211e1e'),
+          plot.margin = margin(.2, .5, 0, .1, "cm")) +
+    guides(color = F, fill = F) +
+    labs(x = '', y = 'Average Elevation Gain/Loss (Meters)')
 
-summary %>% 
+ggsave(file="strava_violin.svg", plot=violin, width=3.5, height=2.5)
+
+lines <- summary %>% 
   mutate(year = year(start),
          month = ifelse(month(start) %%3 != 0, 3 - month(start)%%3 + month(start), month(start)),
          yrmo = ymd(paste(year,month,'01', sep = '-'))) %>% 
@@ -90,25 +104,30 @@ summary %>%
   summarise(miles = sum(miles)) %>% 
   filter(yrmo != ymd('2017-12-01')) %>% 
   ggplot(aes(x = yrmo, y = miles)) +
-  geom_line(aes(color = Activity), alpha = .9) +
-  geom_point(aes(fill = Activity), shape = 21, color = '#211e1e', stroke = .1, size = 1, alpha = .9) +
-  scale_y_continuous(limits = c(0,400)) +
-  scale_color_manual(values = c('deepskyblue2','darkolivegreen2')) +
-  scale_fill_manual(values = c('deepskyblue2','darkolivegreen2')) +
-  labs(x = '', y = 'Miles Travelled') +
-  scale_x_date(date_breaks = '3 months', expand = c(0,0),
-               labels = function(x) ifelse(month(x) == 3, paste0('Q1\n',year(x)),
-                                                                     ifelse(month(x) == 6, 'Q2',
-                                                                            ifelse(month(x) == 9, 'Q3','Q4')))) +
-  theme_hc(bgcolor = "darkunica") +
-  theme(axis.text = element_text(color='gray80'),
-        panel.grid.major.y = element_line(color='gray25', size = .3),
-        panel.grid.major.x = element_line(color='gray25', size = .3),
-        text = element_text(family ='Calibri',size = 11),
-        panel.background = element_rect(fill = '#211e1e', color = '#211e1e'),
-        plot.background = element_rect(fill = '#211e1e', color = '#211e1e'),
-        plot.margin = margin(.2, .5, .1, .1, "cm")) +
-  guides(color = F, fill = F)
+    geom_line(aes(color = Activity), alpha = .8) +
+    geom_point(aes(fill = Activity), shape = 21, color = '#211e1e', stroke = .1, size = 1, alpha = .9) +
+    scale_y_continuous(limits = c(0,400)) +
+    scale_color_manual(values = c('deepskyblue2','darkolivegreen2')) +
+    scale_fill_manual(values = c('deepskyblue2','darkolivegreen2')) +
+    labs(x = '', y = 'Miles Travelled') +
+    scale_x_date(date_breaks = '3 months',
+                 labels = function(x) ifelse(month(x) == 3, paste0('Q1\n',year(x)),
+                                                                       ifelse(month(x) == 6, 'Q2',
+                                                                              ifelse(month(x) == 9, 'Q3','Q4')))) +
+    theme_hc(bgcolor = "darkunica") +
+    theme(axis.text = element_text(color='gray80'),
+          panel.grid.major.y = element_line(color='gray25', size = .3),
+          panel.grid.major.x = element_line(color='gray25', size = .3),
+          text = element_text(family ='Calibri',size = 9),
+          panel.background = element_rect(fill = '#211e1e', color = '#211e1e'),
+          plot.background = element_rect(fill = '#211e1e', color = '#211e1e'),
+          legend.position = c(.9,.85),
+          legend.title = element_blank(),
+          legend.background = element_rect(fill = '#211e1e', color = '#211e1e'),
+          plot.margin = margin(.2, .5, .1, .1, "cm"))
+   # guides(color = F, fill = F)
+
+ggsave(file="strava_lines.svg", plot=lines, width=3.5, height=2.5)
 
 
 weird <- filter(strava, time_chg > 1)
