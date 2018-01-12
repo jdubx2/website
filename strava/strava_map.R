@@ -2,6 +2,7 @@
 
 test <- filter(strava, File == '20130209-203200-Ride.gpx') %>% select(File,Latitude,Longitude)
 rides <- filter(strava, Activity == 'Ride') %>% select(File,Latitude,Longitude)
+runs <- filter(strava, Activity == 'Run') %>% select(File,Latitude,Longitude)
 
 
 # Sample geojson - linestring
@@ -54,26 +55,30 @@ test <- filter(rides, File %in% c('20130209-203200-Ride.gpx','20130221-015007-Ri
 
 get_mls_json <- function(df){
   
-  final_vec <- c()
+  final_list <- list()
+  list_pos <- 1
   
   for(file in unique(df$File)){
     
     sub_df <- filter(df, File == file)
     json_vec <- c()
     for(row in seq(1,nrow(sub_df))){
-      json_vec <- c(json_vec, paste0('[',sub_df$Longitude[row],',',sub_df$Latitude[row],']'))
+      json_vec <- c(json_vec, paste0(ifelse(row == 1 & file != head(df$File, n=1), '[', ''),
+                                     '[',sub_df$Longitude[row],',',sub_df$Latitude[row],']',
+                                     ifelse(row == nrow(sub_df) & file != tail(df$File, n=1), ']', '')))
     }
-    
-    final_vec <- c(final_vec, paste0('[',paste(json_vec, sep = '', collape = ','),']'))
+    final_list[[list_pos]] <- json_vec
+    list_pos <- list_pos + 1
   }
-  #return(paste0('{"type":"MultiLineString","coordinates":[[',final_vec,']]}'))
-  return(final_vec)
+  return(paste0('{"type":"MultiLineString","coordinates":[[',paste0(unlist(final_list), collapse = ','),']]}'))
+  #return(final_list)
 }
 
-rides_mls <- get_mls_json(test)
-
+rides_mls <- get_mls_json(rides)
 write(rides_mls, 'rides_mls.json')
 
+runs_mls <- get_mls_json(runs)
+write(runs_mls, 'runs_mls.json')
 
 
 
