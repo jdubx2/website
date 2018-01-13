@@ -17,7 +17,7 @@ body {
   background-attachment: fixed; */
 }
 
-a, p, h1, h2 {font-family: 'Open Sans', sans-serif;}
+a, p, h1, h2, ol {font-family: 'Open Sans', sans-serif;}
 
 @media (min-width: 992px) {
   body {
@@ -172,3 +172,4 @@ a, p, h1, h2 {font-family: 'Open Sans', sans-serif;}
 .gmisc_table tr:nth-child(even){
   background-color: #303030;
 }
+#map { height: 420px; }

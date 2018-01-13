@@ -18,6 +18,7 @@
 
     <link href='css/mdb.css' rel='stylesheet'>
     <link href='css/os.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/leaflet.css">
 
     <link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
 
@@ -28,7 +29,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container"> <img class ='navlogo' src ='img/logo.png' alt="", height = '55', width = '55'>
-        <a class="navbar-brand" href="index.html"><b>jesseweiss.me</b></a>
+        <a class="navbar-brand" href="index.html">jesseweiss.me</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -83,11 +84,12 @@
           <h2><b>Preface</b></h2>
           <p>Strava is a fitness tracking application that I use to track runs, bike rides, and the occasional hike.
             The app allows users to download their activity history in bulk as individual GPX files, a GPS enabled data format built ontop of XML.
-            I've been using the app for almost five years so there should be plenty of my personal data to explore!</p>
-          <p>In this project, I do some analysis and make some maps? TBD...</p>
+            Since I've been using the app for almost five years, I decided that my collection of activities would be large enough to provide some interesting insights.</p>
+          <p>In this project I use python to prepare my dataset, R to perform some exploratory analysis, and leaflet.js to create an
+            interactive map of my activities.</p>
           <h2><b>GPX Parsing</b></h2>
           <p>Python has a great library for parsing GPX files named <a target = '_blank' href = 'https://github.com/tkrajina/gpxpy'>gpxpy</a>. Using this library along with pandas,
-            I combined my collection of ride files (208 in total) into a tidy dataframe for further analysis.</p>
+            I combined my collection of activity files (208 in total) into a tidy dataframe for further analysis.</p>
         </div>
         <div class = 'code-chunk'>
 <pre style="background:#211e1e;color:#f8f8f8"><span style="color:#e28964">import</span> os
@@ -131,7 +133,7 @@ df.head()
 </pre>
         </div>
         <div class = 'img_box'>
-          <table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+          <table class="gmisc_table" style="border-collapse: collapse; margin-top: 0em; margin-bottom: 0em;">
           <thead>
           <tr>
           <th style="border-bottom: 1px solid grey; border-top: 2px solid grey;"> </th>
@@ -202,15 +204,119 @@ df.head()
           </table>
         </div>
         <div class = 'text-input-box'>
+          <h2><b>EDA</b></h2>
+          <p> At this point I have a dataframe of temporal and location based inforamtion for each activity so in order to extract some
+            real insights I'll need to add some additional variables. Using R's <a href='https://github.com/cran/geosphere' target = '_blank'>geosphere</a> package I can
+            calculate the haversine distance between lat/long coordinates for each activity. I'll also caluclate differences in time
+            and elevation for each waypoint. I then create a summary datafame with statistics on each activity including:</p>
+            <ol style = 'font-size: .95rem;'>
+              <li>Total Miles Travelled
+              <li>Total Time Spent
+              <li>Average Speed (MPH)
+              <li>Elevation Gain/Lost
+            </ol>
+          <p>I'll also run a simple linear regression on time predicted via distance to evaluate the overall consistency of both my runs and rides.</p>
+          </div>
+          <div class="code-chunk">
+<pre style="background:#211e1e;color:#dadada">library(<span style="color:#c1c144">dplyr</span>)
+library(<span style="color:#c1c144">lubridate</span>)
+library(<span style="color:#c1c144">geosphere</span>)
 
+<span style="color:#c1c144">strava</span> <span style="color:#47b8d6">&lt;-</span> read.csv(<span style="color:#ad9361">"D:/strava/strava_rides.csv"</span>)
+
+<span style="color:#c1c144">strava</span> <span style="color:#47b8d6">&lt;-</span> <span style="color:#c1c144">strava</span> %<span style="color:#47b8d6">></span>%
+  filter(<span style="color:#c1c144">Activity</span> <span style="color:#47b8d6">%in%</span> c(<span style="color:#ad9361">'Run'</span>, <span style="color:#ad9361">'Ride'</span>)) %<span style="color:#47b8d6">></span>%
+  group_by(<span style="color:#c1c144">File</span>) %<span style="color:#47b8d6">></span>%
+  mutate(<span style="color:#c1c144">long2</span> <span style="color:#47b8d6">=</span> ifelse(is.na(lag(<span style="color:#c1c144">Longitude</span>)),<span style="color:#c1c144">Longitude</span>,lag(<span style="color:#c1c144">Longitude</span>)),
+         <span style="color:#c1c144">lat2</span> <span style="color:#47b8d6">=</span> ifelse(is.na(lag(<span style="color:#c1c144">Latitude</span>)),<span style="color:#c1c144">Latitude</span>,lag(<span style="color:#c1c144">Latitude</span>))) %<span style="color:#47b8d6">></span>%
+  rowwise() %<span style="color:#47b8d6">></span>%
+  mutate(<span style="color:#c1c144">dist</span> <span style="color:#47b8d6">=</span> geosphere<span style="color:#a1a1ff">:</span><span style="color:#a1a1ff">:</span>distHaversine( c(<span style="color:#c1c144">Longitude</span>, <span style="color:#c1c144">Latitude</span>),
+                                          c(<span style="color:#c1c144">long2</span>, <span style="color:#c1c144">lat2</span>)))
+
+<span style="color:#c1c144">strava</span> <span style="color:#47b8d6">&lt;-</span> <span style="color:#c1c144">strava</span> %<span style="color:#47b8d6">></span>%  mutate(<span style="color:#c1c144">Timestamp</span> <span style="color:#47b8d6">=</span> ymd_hms(<span style="color:#c1c144">Timestamp</span>)) %<span style="color:#47b8d6">></span>%
+  group_by(<span style="color:#c1c144">File</span>) %<span style="color:#47b8d6">></span>%
+  mutate(<span style="color:#c1c144">elev_chg</span> <span style="color:#47b8d6">=</span> <span style="color:#c1c144">Elevation</span> <span style="color:#47b8d6">-</span> ifelse(is.na(lag(<span style="color:#c1c144">Elevation</span>)), <span style="color:#c1c144">Elevation</span>, lag(<span style="color:#c1c144">Elevation</span>)),
+         <span style="color:#c1c144">time_lag</span> <span style="color:#47b8d6">=</span> if_else(is.na(lag(<span style="color:#c1c144">Timestamp</span>)), <span style="color:#c1c144">Timestamp</span>, lag(<span style="color:#c1c144">Timestamp</span>)),
+         <span style="color:#c1c144">time_chg</span> <span style="color:#47b8d6">=</span> as.numeric(difftime(<span style="color:#c1c144">Timestamp</span>, <span style="color:#c1c144">time_lag</span>, <span style="color:#c1c144">units</span> <span style="color:#47b8d6">=</span> <span style="color:#ad9361">'mins'</span>)))
+
+<span style="color:#c1c144">summary</span> <span style="color:#47b8d6">&lt;-</span> <span style="color:#c1c144">strava</span> %<span style="color:#47b8d6">></span>%
+  group_by(<span style="color:#c1c144">File</span>, <span style="color:#c1c144">Activity</span>) %<span style="color:#47b8d6">></span>%
+  summarise(<span style="color:#c1c144">miles</span> <span style="color:#47b8d6">=</span> sum(<span style="color:#c1c144">dist</span>) <span style="color:#47b8d6">/</span> <span style="color:#ccc">1609.34</span>,
+            <span style="color:#c1c144">start</span> <span style="color:#47b8d6">=</span> min(<span style="color:#c1c144">Timestamp</span>),
+            <span style="color:#c1c144">end</span> <span style="color:#47b8d6">=</span> max(<span style="color:#c1c144">Timestamp</span>),
+            <span style="color:#c1c144">mins</span> <span style="color:#47b8d6">=</span> as.numeric(difftime(<span style="color:#c1c144">end</span>, <span style="color:#c1c144">start</span>, <span style="color:#c1c144">units</span> <span style="color:#47b8d6">=</span> <span style="color:#ad9361">'mins'</span>)),
+            <span style="color:#c1c144">hrs</span> <span style="color:#47b8d6">=</span> as.numeric(<span style="color:#c1c144">mins</span>) <span style="color:#47b8d6">/</span> <span style="color:#ccc">60</span>,
+            <span style="color:#c1c144">mph</span> <span style="color:#47b8d6">=</span> <span style="color:#c1c144">miles</span><span style="color:#47b8d6">/</span><span style="color:#c1c144">hrs</span>,
+            <span style="color:#c1c144">elev_gain</span> <span style="color:#47b8d6">=</span> sum(<span style="color:#c1c144">elev_chg</span>[<span style="color:#c1c144">elev_chg</span> <span style="color:#47b8d6">></span> <span style="color:#ccc">0</span>]),
+            <span style="color:#c1c144">elev_loss</span> <span style="color:#47b8d6">=</span> sum(<span style="color:#c1c144">elev_chg</span>[<span style="color:#c1c144">elev_chg</span> <span style="color:#47b8d6">&lt;</span> <span style="color:#ccc">0</span>]))
+
+<span style="color:#c1c144">ride_ols</span> <span style="color:#47b8d6">&lt;-</span> summary(lm(<span style="color:#c1c144">hrs</span> <span style="color:#a1a1ff">~</span> <span style="color:#c1c144">miles</span>, <span style="color:#c1c144">data</span> <span style="color:#47b8d6">=</span> filter(<span style="color:#c1c144">summary</span>, <span style="color:#c1c144">Activity</span> <span style="color:#47b8d6">=</span><span style="color:#47b8d6">=</span> <span style="color:#ad9361">'Ride'</span>)))
+<span style="color:#c1c144">run_ols</span> <span style="color:#47b8d6">&lt;-</span> summary(lm(<span style="color:#c1c144">hrs</span> <span style="color:#a1a1ff">~</span> <span style="color:#c1c144">miles</span>, <span style="color:#c1c144">data</span> <span style="color:#47b8d6">=</span> filter(<span style="color:#c1c144">summary</span>, <span style="color:#c1c144">Activity</span> <span style="color:#47b8d6">=</span><span style="color:#47b8d6">=</span> <span style="color:#ad9361">'Run'</span>)))
+<span style="color:#c1c144">rsq_df</span> <span style="color:#47b8d6">&lt;-</span> data.frame(<span style="color:#c1c144">Act</span> <span style="color:#47b8d6">=</span> c(<span style="color:#ad9361">'Ride'</span>,<span style="color:#ad9361">'Run'</span>), <span style="color:#c1c144">rsq</span> <span style="color:#47b8d6">=</span> c(round(<span style="color:#c1c144">ride_ols</span><span style="color:#a1a1ff">$</span><span style="color:#c1c144">r.squared</span>,<span style="color:#ccc">2</span>),round(<span style="color:#c1c144">run_ols</span><span style="color:#a1a1ff">$</span><span style="color:#c1c144">r.squared</span>,<span style="color:#ccc">2</span>)))
+</pre>
         </div>
-        <div class = 'img_box'>
-          <img class = 'img_box_img2' src = 'img/strava_scat.svg'>
+        <div class = 'text-input-box'>
+          <p>
+         With this information I'm ready to plot the data to compare activities and get an idea of how consistent my efforts are.
+            The plotting code is a little verbose and not shown below but can be viewed on <a target='_blank' href='https://github.com/jdubx2/website/blob/master/strava/strava.R'>github</a>.
+          </p>
+        </div>
+        <div class = 'img_box' style = 'margin-bottom:.1rem;'>
           <img class = 'img_box_img2' src = 'img/strava_lines.svg'>
+          <img class = 'img_box_img2' src = 'img/strava_scat.svg'>
         </div>
-        <div class = 'img_box'>
+        <div class='img_box'>
           <img class = 'img_box_img2' src = 'img/strava_violin.svg'>
           <img class = 'img_box_img2' src = 'img/strava_box.svg'>
+        </div>
+        <div class="text-input-box">
+          <h2><b>Results</b></h2>
+          <p>Alright! The year by year trend is a little sad to look at but there are some hidden factors at play here.
+            Biking was deifnitely my primary source of excersise until mid 2105 when I began training for a marathon, and after 2016 I more
+          or less dropped biking completely in favor of indoor rowing and weight lifting. I'm sure I haven't seen the last of my bike though!
+        </p>
+        <p> A predictable but interesting trend is the variability for rides vs runs. It looks like I'm an extremely consistent runner when it comes to speed,
+          validated by a .96 r squared from the regression and the tight distribution of both speed and elevation changes seen in the box and violin plots.
+          Rides are less consistent but are typically at least 2.5 times faster and 3-4 times further than my runs.
+        </p>
+        <h2><b>Mapping</b></h2>
+        <p>
+          Of course, 500k rows of latitude and longitude coordinates were just begging to be mapped so I decided to use Leaflet.js to create an interactive map. After loading a base map,
+          leaflet can be fed geojson linestrings that it converts to svg paths. These paths can in turn be styled with generic css which will allow me to use the same color scheme for rides and runs among other things.
+          Converting my data to geojson took a little bit of effort but the leaflet implemenation was extremely easy and highly recommened for custom mapping projects. I used D3's json handler to load my geojson files
+          for rides and runs, all implemented in just a few lines of javascript.
+        </p>
+        </div>
+        <div class="code-chunk">
+<pre style="background:#211e1e;color:#f8f8f8"><span style="color:#3e87e3">var</span> <span style="color:#3e87e3">ridesPath</span> <span style="color:#e28964">=</span> {
+<span style="color:#65b042">"color"</span><span style="color:#e28964">:</span> <span style="color:#65b042">"#00b2ee"</span>,
+<span style="color:#65b042">"weight"</span><span style="color:#e28964">:</span> <span style="color:#3387cc">2</span>,
+<span style="color:#65b042">"opacity"</span><span style="color:#e28964">:</span> <span style="color:#3387cc">0.4</span>
+};
+<span style="color:#3e87e3">var</span> <span style="color:#3e87e3">runsPath</span> <span style="color:#e28964">=</span> {
+<span style="color:#65b042">"color"</span><span style="color:#e28964">:</span> <span style="color:#65b042">"#bcee68"</span>,
+<span style="color:#65b042">"weight"</span><span style="color:#e28964">:</span> <span style="color:#3387cc">2</span>,
+<span style="color:#65b042">"opacity"</span><span style="color:#e28964">:</span> <span style="color:#3387cc">0.4</span>
+};
+
+<span style="color:#3e87e3">var</span> <span style="color:#3e87e3">map</span> <span style="color:#e28964">=</span> <span style="color:#3e87e3">new</span> L.Map(<span style="color:#65b042">"map"</span>).setView([<span style="color:#3387cc">34.0195</span>,<span style="color:#e28964">-</span><span style="color:#3387cc">118.4912</span>], <span style="color:#3387cc">12</span>);
+
+map.addLayer(<span style="color:#3e87e3">new</span> L.TileLayer(<span style="color:#65b042">"https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"</span>));
+
+d3.json(<span style="color:#65b042">"rides_mls.json"</span>, <span style="color:#e28964">function</span>(<span style="color:#3e87e3">error</span>, <span style="color:#3e87e3">collection</span>) {
+<span style="color:#e28964">if</span> (<span style="color:#3e87e3">error</span>) <span style="color:#3e87e3">throw</span> <span style="color:#3e87e3">error</span>;
+
+map.addLayer(<span style="color:#3e87e3">new</span> L.geoJSON(<span style="color:#3e87e3">collection</span>, {<span style="color:#3e87e3">style</span> <span style="color:#e28964">:</span> <span style="color:#3e87e3">ridesPath</span>}));
+});
+d3.json(<span style="color:#65b042">"runs_mls.json"</span>, <span style="color:#e28964">function</span>(<span style="color:#3e87e3">error</span>, <span style="color:#3e87e3">collection</span>) {
+<span style="color:#e28964">if</span> (<span style="color:#3e87e3">error</span>) <span style="color:#3e87e3">throw</span> <span style="color:#3e87e3">error</span>;
+
+map.addLayer(<span style="color:#3e87e3">new</span> L.geoJSON(<span style="color:#3e87e3">collection</span>, {<span style="color:#3e87e3">style</span> <span style="color:#e28964">:</span> <span style="color:#3e87e3">runsPath</span>}));
+});))
+</pre>
+        </div>
+        <div class="img_box">
+        <div id="map"></div>
         </div>
 
     </div>
@@ -229,9 +335,11 @@ df.head()
     <script src="vendor/bootstrap/js/parallax.min.js"></script>
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/bootstrap/js/leaflet.js"></script>
+    <script src = "vendor/bootstrap/js/d3.v4.min.js"></script>
 
     <script src="vendor/bootstrap/js/newjs.js"></script>
-    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src = "vendor/bootstrap/js/strava_map.js"></script>
 
   </body>
 
