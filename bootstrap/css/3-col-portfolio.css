@@ -158,6 +158,12 @@ a, p, h1, h2, ol {font-family: 'Open Sans', sans-serif;}
   border:inset gray;
   border-width:.05em .05em .05em .05em;
 }
+.img_box_img{
+  margin-right: -3px !important;
+  width: 100%;
+  border:inset gray;
+  border-width:.05em .05em .05em .05em;
+}
 .gmisc_table{
   background-color: #211e1e;
   width: 100%;
