@@ -3,8 +3,8 @@ library(dplyr)
 library(ggplot2)
 library(tidyr)
 
-ingredients <- read.csv("bsingredients.csv", stringsAsFactors = F)
-recipes <- read.csv("bsrecipes.csv", stringsAsFactors = F)
+ingredients <- read.csv("data/bsingredients.csv", stringsAsFactors = F)
+recipes <- read.csv("data/bsrecipes.csv", stringsAsFactors = F)
 
 
 ### Remove Duplicates / select cols for join
@@ -14,7 +14,7 @@ recipes <- recipes %>%
   select(Rec_ID, Style_Master)
 
 
-##3 Join style_master to ingredients, fix names
+### Join style_master to ingredients, fix names
 ingredients <- ingredients %>%
   left_join(recipes, by = 'Rec_ID') %>%
   filter(!(is.na(Style_Master))) %>%
@@ -23,7 +23,8 @@ ingredients <- ingredients %>%
 
 
 ### imported style_df dataframe from beersmith_recipes.r to filter out frequent styles 
-style_df <- select(style_df, Style_Master)
+style_df <- style_df %>% 
+  arrange(desc(count)) %>% slice(1:15) %>% select(Style_Master)
 
 
 ### join style_df table to filter out low volume styles
@@ -46,7 +47,7 @@ ingredient_nodes <- ingredients %>%
 #   summarise()
 # 
 # write.csv(in_cleanup, 'in_cleanup.csv', row.names = F)
-in_cleanup <- read.csv('in_cleanup.csv', stringsAsFactors = F)
+in_cleanup <- read.csv('data/in_cleanup.csv', stringsAsFactors = F)
 
 
 ### join cleaned ingredient column, recalc the count, spread to table format by style
@@ -54,18 +55,17 @@ ingredient_nodes <- ingredient_nodes %>%
   left_join(in_cleanup, by = c('ing_simple','ing_type')) %>%
   filter(ing_final != '') %>%
   group_by(ing_final, ing_type, style) %>%
-  summarise(count = sum(count)) %>%
-  spread(style, count)
+  summarise(count = sum(count)) 
 
 ### check for overallping names regardless of ing_type
 ingredient_nodes %>% group_by(ing_final) %>% summarise(count = n()) %>% arrange(desc(count))
 
 
-### filter out ingredients not in node list to prepare list of edges
+### filter out ingredient/style combinations not in node list + add ing_final
 pre_edge_df <- ingredients %>%
   inner_join(in_cleanup, by = c('ing_simple','ing_type')) %>%
   filter(ing_final != '') %>%
-  inner_join(ingredient_nodes, by = 'ing_final') %>%
+  inner_join(ingredient_nodes, by = c('ing_final','style')) %>%
   select(ing_final, rec_id, style) %>%
   group_by(ing_final, rec_id, style) %>%
   summarise() %>%
@@ -118,40 +118,20 @@ pre_edge_df <- ingredients %>%
     
     ingredient_edges <- combo_df_final %>%
       group_by(V1, V2, style) %>%
-      summarise(count = n()) %>%
-      spread(style, count)
+      summarise(count = n())
     
+saveRDS(ingredient_nodes, 'data/ingredient_nodes.rds')
+saveRDS(ingredient_edges, 'data/ingredient_edges.rds')
     
-### Nodes and edges complete ###
+# ### Nodes and edges complete ###
+
     
-### turn NA's to 0
-### filter porter only for experimentation
+library(jsonlite)
+  
+  write_json(list(nodes = filter(ingredient_nodes, style == 'Porter'), 
+                  links = filter(ingredient_edges, style == 'Porter')), 'data/porter.json')
     
-    
-    ingredient_edges[is.na(ingredient_edges)] <- 0
-    ingredient_nodes[is.na(ingredient_nodes)] <- 0
-      
-    
-    porter_edges <- ingredient_edges %>%
-      ungroup() %>%
-      select(source = V1, target = V2, value = Porter) %>%
-      filter(value > 50) %>%
-      mutate(value = sqrt(value))
-    
-    edge_filter <- data.frame(id = unique(gather(porter_edges, nothing, name, -value)$name), stringsAsFactors = F)
-    
-    porter_nodes <- ingredient_nodes %>%
-      ungroup() %>%
-      select(id = ing_final, group = ing_type, value = Porter) %>%
-      filter(value > 0) %>%
-      inner_join(edge_filter, by = 'id')
-    
-  library(jsonlite)
-    
-    write_json(list(nodes = porter_nodes, links = porter_edges), 'ing_net.json')
-    
-    
-    cbind(sort(unique(gather(porter_edges, nothing, name, -value)$name)),sort(porter_nodes$id))
+  
     
 
 

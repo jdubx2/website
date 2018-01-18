@@ -127,7 +127,7 @@ scatter <- recipes %>%
     guides(alpha = F, color = F) 
 
 
-ggsave('recipe_scatter.png', scatter, device='png', height = 3.5, width= 7)
+ggsave('recipe_scatter.png', scatter, device='png', height = 4.5, width= 8)
 
 ###########################
 
