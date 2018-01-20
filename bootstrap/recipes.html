@@ -67,7 +67,7 @@
       <div class = 'banner-space'></div>
         <div class = 'text-input-box'>
           <h1 class='article_h1'><b>Ingredient Networks</b>
-            <a style = 'float:right;' href='https://github.com/jdubx2/website' target="_blank"><div class = 'nav-icon'><svg class = 'nav-icon-svg-gh' xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path stroke="none" fill="black" d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            <a style = 'float:right;' href='https://github.com/jdubx2/ingredient_network' target="_blank"><div class = 'nav-icon'><svg class = 'nav-icon-svg-gh' xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path stroke="none" fill="black" d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
             </div></a>
           <br /><span class = 'sub_span'>Analyzing a corpus of 30k+ beer recipes</span></h1>
           <div class='customHr'>a</div>
@@ -247,13 +247,13 @@ ingredientList <span style="color:#e28964">=</span> []
           <p>After cleaning we are down to a final count of 26,578 recipes. Now let's find out which styles are the most popular.
             I'll utilize SRM values to color my visualizations so I've mapped some approximate hex values that I grabbed from
             <a target="_blank" href = 'http://www.twobeerdudes.com/beer/srm'>here</a> to my dataset. The plotting code isn't shown below but
-            can be viewed on <a href = '#'>github</a>.</p>
+            can be viewed on <a target = '_blank' href = 'https://github.com/jdubx2/website/blob/master/recipes/beersmith%20recipes.R'>github</a>.</p>
         </div>
         <div class = 'img_box'>
           <img class = 'img_box_img' src = 'img/recipe_bar.svg'>
         </div>
         <div class = 'text-input-box'>
-          <p>Not suprisingly, IPA's are the overwhelming favorite among homebrewers and it's interesting to note that 13 styles account
+          <p>It seems that IPA's are the overwhelming favorite on beersmith and it's interesting to note that 13 styles account
             for 85% of all recipes in the database. Even though beers with mid-range SRM's are the most popular (thanks to IPA's
             and pale ales), there still seems to be plenty of love for dark beers with stouts and porters taking third and fifth place respectively.</p>
             <p>Now let's take a look at preferences related to alchol level and bitterness by creating a scatterplot. We'll plot all of the recipes as points and
@@ -261,6 +261,158 @@ ingredientList <span style="color:#e28964">=</span> []
         </div>
         <div class = 'img_box'>
           <img class = 'img_box_img' src = 'img/recipe_scatter.png'>
+        </div>
+        <div class = 'text-input-box'>
+          <p>An interesting spread. Light beers like pilsners and kolsches are expectedly tame and have a
+            fairly limited range of both bitterness and alcohol content. Dark beers seem to have the most
+            variation in alcohol content while beers with mid range SRM's come in a wide variety of
+            bitterness levels. All in all, the sweet spot for this corpus seems to be around 3%-9% ABV with 15-45 IBU's.
+          </p>
+          <h2><b>Visualizing the Ingredients</b></h2>
+          <p>I explored a number of options for digging into the ingredients portion of this dataset and concluded that network diagrams
+            would be a great way to see which ingredients are the most popular while also getting an idea of how they are typically used together.
+          </p>
+          <p>
+            In order to build a network visualization for each style of beer, I need to transform the ingredients of each recipe
+            into a dataset of nodes and edges. Each node will be an ingredient, and I want the size of the node to correspond with how often the ingredient
+            appears in the recipe corpus. The size & charge of the edges between nodes will then correspond to the frequency with which two
+            ingredients appear together. In order to count these appearances, I'll increment the value of an edge by one each time two ingredients are used together.
+            For example, a recipe with three ingredients would have three pairs counted - (ingredient 1, ingredient 2) / (ingredient 1, ingredient 3) / (ingredient 2, ingredient 3).</p>
+            <p>The final output needs to be a json object that I can feed to the D3 powered visualization I'll be building.
+            The commented code chunk below shows the process of converting the raw csv files into a json object with R.</p>
+          </p>
+        </div>
+        <div class = 'code-chunk'>
+<pre style="background:#211e1e;color:#dadada">library(<span style="color:#c1c144">dplyr</span>)
+library(<span style="color:#c1c144">tidyr</span>)
+
+<span style="color:#c1c144">ingredients</span> <span style="color:#47b8d6">&lt;-</span> read.csv(<span style="color:#ad9361">"data/bsingredients.csv"</span>, <span style="color:#c1c144">stringsAsFactors</span> <span style="color:#47b8d6">=</span> <span style="color:#de8e30;font-weight:700">F</span>)
+<span style="color:#c1c144">recipes</span> <span style="color:#47b8d6">&lt;-</span> read.csv(<span style="color:#ad9361">"data/bsrecipes.csv"</span>, <span style="color:#c1c144">stringsAsFactors</span> <span style="color:#47b8d6">=</span> <span style="color:#de8e30;font-weight:700">F</span>)
+
+<span style="color:#555">### Remove duplicates / select cols for join</span>
+<span style="color:#c1c144">recipes</span> <span style="color:#47b8d6">&lt;-</span> <span style="color:#c1c144">recipes</span> %<span style="color:#47b8d6">></span>%
+  group_by(<span style="color:#c1c144">Rec_ID</span>) %<span style="color:#47b8d6">></span>%
+  filter(row_number() <span style="color:#47b8d6">=</span><span style="color:#47b8d6">=</span> <span style="color:#ccc">1</span>) %<span style="color:#47b8d6">></span>%
+  select(<span style="color:#c1c144">Rec_ID</span>, <span style="color:#c1c144">Style_Master</span>)
+
+
+<span style="color:#555">### Join style_master to ingredients, fix names</span>
+<span style="color:#c1c144">ingredients</span> <span style="color:#47b8d6">&lt;-</span> <span style="color:#c1c144">ingredients</span> %<span style="color:#47b8d6">></span>%
+  left_join(<span style="color:#c1c144">recipes</span>, <span style="color:#c1c144">by</span> <span style="color:#47b8d6">=</span> <span style="color:#ad9361">'Rec_ID'</span>) %<span style="color:#47b8d6">></span>%
+  filter(<span style="color:#47b8d6">!</span>(is.na(<span style="color:#c1c144">Style_Master</span>))) %<span style="color:#47b8d6">></span>%
+  select(<span style="color:#c1c144">ing_type</span> <span style="color:#47b8d6">=</span> <span style="color:#c1c144">Ing_Type</span>, <span style="color:#c1c144">ing</span> <span style="color:#47b8d6">=</span> <span style="color:#c1c144">Ingredient</span>, <span style="color:#c1c144">ing_simple</span> <span style="color:#47b8d6">=</span> <span style="color:#c1c144">Ingredient_simple</span>,
+         <span style="color:#c1c144">rec_id</span> <span style="color:#47b8d6">=</span> <span style="color:#c1c144">Rec_ID</span>, <span style="color:#c1c144">style</span> <span style="color:#47b8d6">=</span> <span style="color:#c1c144">Style_Master</span>)
+
+<span style="color:#555">### imported style_df dataframe from beersmith_recipes.r to filter out frequent styles</span>
+<span style="color:#c1c144">style_df</span> <span style="color:#47b8d6">&lt;-</span> <span style="color:#c1c144">style_df</span> %<span style="color:#47b8d6">></span>%
+  arrange(desc(<span style="color:#c1c144">count</span>)) %<span style="color:#47b8d6">></span>% slice(<span style="color:#ccc">1</span><span style="color:#a1a1ff">:</span><span style="color:#ccc">15</span>) %<span style="color:#47b8d6">></span>% select(<span style="color:#c1c144">Style_Master</span>)
+
+<span style="color:#555">### join style_df table to filter out low volume styles</span>
+<span style="color:#555">### remove combos with less than 20 appearances to prune nodes &amp; filter some edge cases</span>
+<span style="color:#c1c144">ingredient_nodes</span> <span style="color:#47b8d6">&lt;-</span> <span style="color:#c1c144">ingredients</span> %<span style="color:#47b8d6">></span>%
+  group_by(<span style="color:#c1c144">ing_simple</span>, <span style="color:#c1c144">ing_type</span>, <span style="color:#c1c144">style</span>) %<span style="color:#47b8d6">></span>%
+  filter(<span style="color:#c1c144">ing_type</span> <span style="color:#47b8d6">%in%</span> c(<span style="color:#ad9361">"Grain"</span>,<span style="color:#ad9361">"Hops"</span>,<span style="color:#ad9361">"Yeast"</span>)) %<span style="color:#47b8d6">></span>%
+  summarise(<span style="color:#c1c144">count</span> <span style="color:#47b8d6">=</span> n()) %<span style="color:#47b8d6">></span>%
+  inner_join(<span style="color:#c1c144">style_df</span>, <span style="color:#c1c144">by</span> <span style="color:#47b8d6">=</span> c(<span style="color:#ad9361">'style'</span> <span style="color:#47b8d6">=</span> <span style="color:#ad9361">'Style_Master'</span>)) %<span style="color:#47b8d6">></span>%
+  arrange(desc(<span style="color:#c1c144">count</span>)) %<span style="color:#47b8d6">></span>%
+  filter(<span style="color:#c1c144">count</span> <span style="color:#47b8d6">></span> <span style="color:#ccc">20</span>,
+         <span style="color:#c1c144">ing_simple</span> <span style="color:#47b8d6">!=</span> <span style="color:#ad9361">"None"</span>,
+         <span style="color:#47b8d6">!</span>(<span style="color:#c1c144">ing_simple</span> <span style="color:#47b8d6">=</span><span style="color:#47b8d6">=</span> <span style="color:#ad9361">"Brewer"</span> <span style="color:#47b8d6">&amp;</span> <span style="color:#c1c144">ing_type</span> <span style="color:#47b8d6">=</span><span style="color:#47b8d6">=</span> <span style="color:#ad9361">"Grain"</span>),
+         <span style="color:#47b8d6">!</span>(<span style="color:#c1c144">ing_simple</span> <span style="color:#47b8d6">=</span><span style="color:#47b8d6">=</span> <span style="color:#ad9361">"Crystal"</span> <span style="color:#47b8d6">&amp;</span> <span style="color:#c1c144">ing_type</span> <span style="color:#47b8d6">=</span><span style="color:#47b8d6">=</span> <span style="color:#ad9361">"Grain"</span>))
+
+<span style="color:#555">### Manual cleanup in excel to merge simmilar nodes</span>
+<span style="color:#555"># in_cleanup &lt;- ingredient_nodes %>%</span>
+<span style="color:#555">#   group_by(ing_simple, ing_type) %>%</span>
+<span style="color:#555">#   summarise()</span>
+<span style="color:#555">#</span>
+<span style="color:#555"># write.csv(in_cleanup, 'in_cleanup.csv', row.names = F)</span>
+<span style="color:#c1c144">in_cleanup</span> <span style="color:#47b8d6">&lt;-</span> read.csv(<span style="color:#ad9361">'data/in_cleanup.csv'</span>, <span style="color:#c1c144">stringsAsFactors</span> <span style="color:#47b8d6">=</span> <span style="color:#de8e30;font-weight:700">F</span>)
+
+<span style="color:#555">### join cleaned ingredient column, recalc the count, spread to table format by style</span>
+<span style="color:#c1c144">ingredient_nodes</span> <span style="color:#47b8d6">&lt;-</span> <span style="color:#c1c144">ingredient_nodes</span> %<span style="color:#47b8d6">></span>%
+  left_join(<span style="color:#c1c144">in_cleanup</span>, <span style="color:#c1c144">by</span> <span style="color:#47b8d6">=</span> c(<span style="color:#ad9361">'ing_simple'</span>,<span style="color:#ad9361">'ing_type'</span>)) %<span style="color:#47b8d6">></span>%
+  filter(<span style="color:#c1c144">ing_final</span> <span style="color:#47b8d6">!=</span> <span style="color:#ad9361">''</span>) %<span style="color:#47b8d6">></span>%
+  group_by(<span style="color:#c1c144">ing_final</span>, <span style="color:#c1c144">ing_type</span>, <span style="color:#c1c144">style</span>) %<span style="color:#47b8d6">></span>%
+  summarise(<span style="color:#c1c144">count</span> <span style="color:#47b8d6">=</span> sum(<span style="color:#c1c144">count</span>))
+
+<span style="color:#555">### check for overallping names regardless of ing_type</span>
+<span style="color:#c1c144">ingredient_nodes</span> %<span style="color:#47b8d6">></span>% group_by(<span style="color:#c1c144">ing_final</span>) %<span style="color:#47b8d6">></span>% summarise(<span style="color:#c1c144">count</span> <span style="color:#47b8d6">=</span> n()) %<span style="color:#47b8d6">></span>% arrange(desc(<span style="color:#c1c144">count</span>))
+
+<span style="color:#555">### filter out ingredient/style combinations not in node list + add ing_final</span>
+<span style="color:#c1c144">pre_edge_df</span> <span style="color:#47b8d6">&lt;-</span> <span style="color:#c1c144">ingredients</span> %<span style="color:#47b8d6">></span>%
+  inner_join(<span style="color:#c1c144">in_cleanup</span>, <span style="color:#c1c144">by</span> <span style="color:#47b8d6">=</span> c(<span style="color:#ad9361">'ing_simple'</span>,<span style="color:#ad9361">'ing_type'</span>)) %<span style="color:#47b8d6">></span>%
+  filter(<span style="color:#c1c144">ing_final</span> <span style="color:#47b8d6">!=</span> <span style="color:#ad9361">''</span>) %<span style="color:#47b8d6">></span>%
+  inner_join(<span style="color:#c1c144">ingredient_nodes</span>, <span style="color:#c1c144">by</span> <span style="color:#47b8d6">=</span> c(<span style="color:#ad9361">'ing_final'</span>,<span style="color:#ad9361">'style'</span>)) %<span style="color:#47b8d6">></span>%
+  select(<span style="color:#c1c144">ing_final</span>, <span style="color:#c1c144">rec_id</span>, <span style="color:#c1c144">style</span>) %<span style="color:#47b8d6">></span>%
+  group_by(<span style="color:#c1c144">ing_final</span>, <span style="color:#c1c144">rec_id</span>, <span style="color:#c1c144">style</span>) %<span style="color:#47b8d6">></span>%
+  summarise() %<span style="color:#47b8d6">></span>%
+  arrange(<span style="color:#c1c144">rec_id</span>,<span style="color:#c1c144">ing_final</span>)
+
+<span style="color:#555">### DPLYR Filter too slow (3.6 sec per recipe) create min/max indexing of recipes instead</span>
+<span style="color:#c1c144">rec_index_df</span><span style="color:#47b8d6">&lt;-</span> <span style="color:#c1c144">pre_edge_df</span> %<span style="color:#47b8d6">></span>%
+  ungroup() %<span style="color:#47b8d6">></span>%
+  mutate(<span style="color:#c1c144">row_num</span> <span style="color:#47b8d6">=</span> row_number()) %<span style="color:#47b8d6">></span>%
+  group_by(<span style="color:#c1c144">rec_id</span>) %<span style="color:#47b8d6">></span>%
+  mutate(<span style="color:#c1c144">min_row</span> <span style="color:#47b8d6">=</span> min(<span style="color:#c1c144">row_num</span>),
+         <span style="color:#c1c144">max_row</span> <span style="color:#47b8d6">=</span> max(<span style="color:#c1c144">row_num</span>)) %<span style="color:#47b8d6">></span>%
+  group_by(<span style="color:#c1c144">rec_id</span>, <span style="color:#c1c144">min_row</span>, <span style="color:#c1c144">max_row</span>) %<span style="color:#47b8d6">></span>%
+  summarise()
+
+<span style="color:#555">### Function for getting combo dataframes and adding to final list</span>
+get_combos <span style="color:#47b8d6">&lt;-</span> <span style="color:#6969fa;font-weight:700">function</span>(<span style="color:#c1c144">min_idx</span>, <span style="color:#c1c144">max_idx</span>) {
+
+      <span style="color:#c1c144">filtered</span> <span style="color:#47b8d6">&lt;-</span> <span style="color:#c1c144">pre_edge_df</span>[<span style="color:#c1c144">min_idx</span><span style="color:#a1a1ff">:</span><span style="color:#c1c144">max_idx</span>,]
+      <span style="color:#c1c144">rec_style</span> <span style="color:#47b8d6">=</span> unique(<span style="color:#c1c144">filtered</span><span style="color:#a1a1ff">$</span><span style="color:#c1c144">style</span>)
+
+      <span style="color:#c1c144">combo_matrix</span> <span style="color:#47b8d6">&lt;-</span> combn(<span style="color:#c1c144">filtered</span><span style="color:#a1a1ff">$</span><span style="color:#c1c144">ing_final</span>, <span style="color:#ccc">2</span>)
+
+      <span style="color:#c1c144">combo_df</span> <span style="color:#47b8d6">&lt;-</span> as.data.frame(t(<span style="color:#c1c144">combo_matrix</span>), <span style="color:#c1c144">stringsAsFactors</span> <span style="color:#47b8d6">=</span> <span style="color:#de8e30;font-weight:700">F</span>) %<span style="color:#47b8d6">></span>%
+        mutate(<span style="color:#c1c144">style</span> <span style="color:#47b8d6">=</span> <span style="color:#c1c144">rec_style</span>)
+
+      <span style="color:#6969fa;font-weight:700">return</span>(<span style="color:#c1c144">combo_df</span>)
+}
+<span style="color:#555">### Itterate through each rec min/max in rec_index_df and get combos</span>
+<span style="color:#555">### add combos to final list and concatenate</span>
+<span style="color:#c1c144">combo_list</span> <span style="color:#47b8d6">&lt;-</span> list()
+<span style="color:#c1c144">i</span> <span style="color:#47b8d6">=</span> <span style="color:#ccc">1</span>
+
+<span style="color:#6969fa;font-weight:700">for</span>(<span style="color:#c1c144">row_idx</span> <span style="color:#6969fa;font-weight:700">in</span> seq_len(nrow(<span style="color:#c1c144">rec_index_df</span>))){
+
+  <span style="color:#c1c144">min</span> <span style="color:#47b8d6">&lt;-</span> as.numeric(<span style="color:#c1c144">rec_index_df</span>[<span style="color:#c1c144">row_idx</span>, <span style="color:#ccc">2</span>])
+  <span style="color:#c1c144">max</span> <span style="color:#47b8d6">&lt;-</span> as.numeric(<span style="color:#c1c144">rec_index_df</span>[<span style="color:#c1c144">row_idx</span>, <span style="color:#ccc">3</span>])
+
+  <span style="color:#6969fa;font-weight:700">if</span>(<span style="color:#c1c144">max</span> <span style="color:#47b8d6">></span> <span style="color:#c1c144">min</span>){
+    <span style="color:#c1c144">combo_list</span>[[<span style="color:#c1c144">i</span>]] <span style="color:#47b8d6">&lt;-</span> get_combos(<span style="color:#c1c144">min</span>,<span style="color:#c1c144">max</span>)
+    <span style="color:#c1c144">i</span> <span style="color:#47b8d6">&lt;-</span> <span style="color:#c1c144">i</span> <span style="color:#47b8d6">+</span> <span style="color:#ccc">1</span>
+    }
+}
+<span style="color:#c1c144">combo_df_final</span> <span style="color:#47b8d6">&lt;-</span> bind_rows(<span style="color:#c1c144">combo_list</span>)
+
+<span style="color:#c1c144">ingredient_edges</span> <span style="color:#47b8d6">&lt;-</span> <span style="color:#c1c144">combo_df_final</span> %<span style="color:#47b8d6">></span>%
+  group_by(<span style="color:#c1c144">V1</span>, <span style="color:#c1c144">V2</span>, <span style="color:#c1c144">style</span>) %<span style="color:#47b8d6">></span>%
+  summarise(<span style="color:#c1c144">count</span> <span style="color:#47b8d6">=</span> n())
+
+saveRDS(<span style="color:#c1c144">ingredient_nodes</span>, <span style="color:#ad9361">'data/ingredient_nodes.rds'</span>)
+saveRDS(<span style="color:#c1c144">ingredient_edges</span>, <span style="color:#ad9361">'data/ingredient_edges.rds'</span>)
+
+<span style="color:#555"># ### Nodes and edges complete ###</span>
+
+library(<span style="color:#c1c144">jsonlite</span>)
+<span style="color:#555">#Example of how to create a json object to feed the forece simulation</span>
+  write_json(list(<span style="color:#c1c144">nodes</span> <span style="color:#47b8d6">=</span> filter(<span style="color:#c1c144">ingredient_nodes</span>, <span style="color:#c1c144">style</span> <span style="color:#47b8d6">=</span><span style="color:#47b8d6">=</span> <span style="color:#ad9361">'Porter'</span>),
+                  <span style="color:#c1c144">links</span> <span style="color:#47b8d6">=</span> filter(<span style="color:#c1c144">ingredient_edges</span>, <span style="color:#c1c144">style</span> <span style="color:#47b8d6">=</span><span style="color:#47b8d6">=</span> <span style="color:#ad9361">'Porter'</span>)), <span style="color:#ad9361">'data/porter.json'</span>)
+
+</pre>
+        </div>
+        <div class = 'text-input-box'>
+          <p>
+            The network visualization below was created using R shiny and D3.js. Shiny passes json objects of nodes and edges
+            to D3 and a force simlation is created in the browser. The repo for this visualization can be found on <a target = '_blank' href = 'https://github.com/jdubx2/ingredient_network'>github</a>
+            and a full screen version can be viewed <a target = '_blank' href ="http://www.quickviz.live/shiny/ingredient_network">here</a>.
+          </p>
+        </div>
+        <div class = 'img_box'>
+          <iframe class = 'network_iframe' src="http://www.quickviz.live/shiny/ingredient_network" width = '100%' overflow = "hidden" scrolling="no"></iframe>
         </div>
     </div>
     </div>
@@ -279,6 +431,10 @@ ingredientList <span style="color:#e28964">=</span> []
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <script src="vendor/bootstrap/js/newjs.js"></script>
+
+    <script type="text/javascript" language="javascript">
+    $('.network_iframe').css('height', $(window).height() * .8 +'px');
+    </script>
 
   </body>
 
