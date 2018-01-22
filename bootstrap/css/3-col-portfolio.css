@@ -17,7 +17,7 @@ body {
   background-attachment: fixed; */
 }
 
-a, p, h1, h2, ol {font-family: 'Open Sans', sans-serif;}
+a, p, h1, h2, ol {font-family: 'Open Sans','droid_sansregular', sans-serif;}
 
 @media (min-width: 992px) {
   body {
