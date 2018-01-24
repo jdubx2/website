@@ -130,7 +130,6 @@ lines <- summary %>%
 ggsave(file="strava_lines.svg", plot=lines, width=3.5, height=2.5)
 
 
-weird <- filter(strava, time_chg > 1)
 check <- filter(strava, File == '20150815-214909-Ride.gpx')
 
 
