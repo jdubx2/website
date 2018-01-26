@@ -17,10 +17,4 @@ json <- geojson_json(yelp[1:200,c(10,11,16)], lat = 'yelpLatitude', lon = 'yelpL
 
 write(json, 'geo.json')
 
-# {
-#   "type": "Point",
-#   "coordinates": [
-#     -105.01621,
-#     39.57422
-#     ]
-# }
+
