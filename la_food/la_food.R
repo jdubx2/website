@@ -1,15 +1,19 @@
-yelp <- read.csv('E:/yelp_df_exp.csv')
+library(dplyr)
+library(ggplot2)
 
+yelp <- read.csv('D:/yelp_df_exp.csv', stringsAsFactors = F)
 
-table(yelp$Parent2)
+yelp <- yelp %>% 
+  mutate(Parent = ifelse(Parent == 'U.K.', 'Other',
+                          ifelse(Parent == 'Mongolian', 'Other',Parent)))
 
 yelp %>% 
-  ggplot(aes(x = weightedScore, group = Parent, color = Parent2))+
-  geom_density(alpha = .5)+
-  facet_grid(Parent2~.)
+  filter(Parent != 'Other') %>% 
+  ggplot(aes(x = weightedScore, color = Parent2, fill = Parent2))+
+  geom_vline(xintercept = .4) +
+  geom_density(alpha = .8) +
+  facet_wrap(~Parent, ncol = 5)
 
-a <- 5; s <- 2; n <- 20; error <- qt(0.975,df=n-1)*s/sqrt(n)
-left <- a-error; right <- a+error; left; right
 
 library(geojsonio)
 
