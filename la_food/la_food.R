@@ -1,7 +1,7 @@
 library(dplyr)
 library(ggplot2)
 
-yelp <- read.csv('D:/yelp_df_exp.csv', stringsAsFactors = F)
+yelp <- read.csv('data/yelp_df_exp.csv', stringsAsFactors = F)
 
 yelp <- yelp %>% 
   mutate(Parent = ifelse(Parent == 'U.K.', 'Other',
@@ -17,8 +17,8 @@ yelp %>%
 
 library(geojsonio)
 
-json <- geojson_json(yelp[1:200,c(10,11,16)], lat = 'yelpLatitude', lon = 'yelpLongitude')
+json <- geojson_json(yelp[,c(10,11,12,16)], lat = 'yelpLatitude', lon = 'yelpLongitude')
 
-write(json, 'geo.json')
+write(json, 'data/geo.json')
 
 
