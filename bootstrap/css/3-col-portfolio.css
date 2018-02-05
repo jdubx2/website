@@ -11,7 +11,7 @@
 
 body {
   padding-top: 54px;
-  background-color: #f5f5f5;
+  background-color: #f0f0f0;
   /* background: url('../img/poly-bg2-min.png') no-repeat center;
   background-size: auto;
   background-attachment: fixed; */
@@ -66,7 +66,7 @@ a, p, h1, h2, ol {font-family: 'Open Sans','droid_sansregular', sans-serif;}
   fill: #800080;
 }
 .lax{
-  background: url('../img/g18537-min.jpg') no-repeat center;
+  background: url('../img/g18537-min2.jpg') no-repeat center;
   background-size: cover;
   background-attachment: fixed;
   margin-top:-1rem;
@@ -77,7 +77,7 @@ a, p, h1, h2, ol {font-family: 'Open Sans','droid_sansregular', sans-serif;}
   padding-bottom: 3rem;
 }
 .welcome-banner{
-  background-color: #f5f5f5;
+  background-color: #f0f0f0;
   opacity: .6;
   border:inset gray;
   border-width:.03em .03em .03em .03em;
@@ -91,9 +91,6 @@ a, p, h1, h2, ol {font-family: 'Open Sans','droid_sansregular', sans-serif;}
   color: rgba(0, 0, 0, 0);
   filter: blur(10px);
 }
-#svg8{
-  background: rgba(245, 245, 245, .1);
-}
 .banner_text{
   height: 0px;
   position: relative;
@@ -101,7 +98,7 @@ a, p, h1, h2, ol {font-family: 'Open Sans','droid_sansregular', sans-serif;}
   z-index: 1;
 }
 .text-input-box{
-  background-color: #f5f5f5;
+  background-color: #f0f0f0;
   width:85%;
   margin: auto;
   opacity: 1;
@@ -182,3 +179,9 @@ a, p, h1, h2, ol {font-family: 'Open Sans','droid_sansregular', sans-serif;}
   background-color: #303030;
 }
 #map { height: 520px; }
+
+.underline{
+  /* fill: rgba(16,16,16,1);
+  stroke: #2C7873; */
+  stroke-width: .8px;
+}
