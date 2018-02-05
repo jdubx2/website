@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1000"
+   height="200"
+   viewBox="0 0 264.58332 52.916668"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   sodipodi:docname="welcome.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="890.21886"
+     inkscape:cy="55.904144"
+     inkscape:document-units="mm"
+     inkscape:current-layer="text817"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1536"
+     inkscape:window-height="811"
+     inkscape:window-x="-8"
+     inkscape:window-y="22"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-244.08332)">
+    <g
+       aria-label="Welcome"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.46666622px;line-height:1.25;font-family:Waltograph;-inkscape-font-specification:Waltograph;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       id="text817">
+      <g
+         aria-label="Welcome"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.46666622px;line-height:1.25;font-family:Waltograph;-inkscape-font-specification:Waltograph;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.07000434"
+         id="text836">
+        <path
+           d="m 39.436255,288.79221 h 0.7112 l 11.887199,-35.86479 h -0.8128 l -11.480799,34.544 -8.5344,-24.1808 h -1.1176 l -8.5344,24.1808 -11.43,-34.544 h -0.8128 l 11.8872,35.86479 h 0.7112 l 8.7376,-24.84119 z"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50.79999924px;line-height:1.25;font-family:'Code Light';-inkscape-font-specification:'Code Light, ';letter-spacing:4.4979167px;stroke-width:0.07000434"
+           id="path846" />
+        <path
+           d="m 60.066345,271.06302 h 18.3896 v -0.8128 h -18.3896 v -16.5608 h 18.796 v -0.762 h -19.6088 v 35.50919 h 0.1016 19.6088 v -0.76199 h -18.8976 z"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50.79999924px;line-height:1.25;font-family:'Code Light';-inkscape-font-specification:'Code Light, ';letter-spacing:4.4979167px;stroke-width:0.07000434"
+           id="path848" />
+        <path
+           d="m 87.979885,252.92742 h -0.8128 v 35.50919 c 6.6548,0 13.258795,0 19.913595,0 v -0.81279 H 87.979885 Z"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50.79999924px;line-height:1.25;font-family:'Code Light';-inkscape-font-specification:'Code Light, ';letter-spacing:4.4979167px;stroke-width:0.07000434"
+           id="path850" />
+        <path
+           d="m 143.42068,263.74782 c -0.8636,-2.0828 -2.1336,-3.9624 -3.6576,-5.5372 -3.1496,-3.2512 -7.4676,-5.2324 -12.2936,-5.2324 -4.826,0 -9.144,1.9812 -12.2936,5.2324 -3.0988,3.2004 -5.08,7.62 -5.08,12.4968 0,4.9276 1.9812,9.3472 5.08,12.5476 3.1496,3.2512 7.4676,5.23239 12.2936,5.23239 4.826,0 9.144,-1.98119 12.2936,-5.23239 1.524,-1.5748 2.794,-3.4544 3.6576,-5.5372 h -0.8636 c -0.8128,1.8796 -1.9812,3.5052 -3.3528,4.9276 -2.9972,3.0988 -7.1628,5.0292 -11.7348,5.0292 -4.572,0 -8.7376,-1.9304 -11.7348,-5.0292 -2.9972,-3.048 -4.8768,-7.2644 -4.8768,-11.938 0,-4.6228 1.8796,-8.8392 4.8768,-11.938 2.9972,-3.0988 7.1628,-4.9784 11.7348,-4.9784 4.572,0 8.7376,1.8796 11.7348,4.9784 1.3716,1.4224 2.54,3.0988 3.3528,4.9784 z"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50.79999924px;line-height:1.25;font-family:'Code Light';-inkscape-font-specification:'Code Light, ';letter-spacing:4.4979167px;stroke-width:0.07000434"
+           id="path852" />
+        <path
+           d="m 186.36864,270.65662 c 0,4.826 -1.9304,9.144 -5.0292,12.2936 -3.1496,3.2004 -7.5184,5.18159 -12.2936,5.18159 -4.7752,0 -9.0932,-1.98119 -12.2428,-5.18159 -3.0988,-3.1496 -5.08,-7.4676 -5.08,-12.2936 0,-4.826 1.9812,-9.144 5.08,-12.2936 3.1496,-3.2004 7.4676,-5.1816 12.2428,-5.1816 4.7752,0 9.144,1.9812 12.2936,5.1816 3.0988,3.1496 5.0292,7.4676 5.0292,12.2936 z m -35.4584,0 c 0,5.0292 2.0828,9.6012 5.334,12.9032 3.2512,3.3528 7.8232,5.38479 12.8016,5.38479 5.0292,0 9.5504,-2.03199 12.8524,-5.38479 3.2512,-3.302 5.334,-7.874 5.334,-12.9032 0,-5.0292 -2.0828,-9.6012 -5.334,-12.9032 -3.302,-3.3528 -7.8232,-5.3848 -12.8524,-5.3848 -4.9784,0 -9.5504,2.032 -12.8016,5.3848 -3.2512,3.302 -5.334,7.874 -5.334,12.9032 z"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50.79999924px;line-height:1.25;font-family:'Code Light';-inkscape-font-specification:'Code Light, ';letter-spacing:4.4979167px;stroke-width:0.07000434"
+           id="path854" />
+        <path
+           d="m 196.17674,254.04502 14.478,21.5392 h 0.6604 l 14.478,-21.5392 v 34.39159 h 0.762 v -35.55999 h -0.8128 l -14.7828,21.7932 -14.732,-21.7932 h -0.8128 v 35.55999 h 0.762 z"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50.79999924px;line-height:1.25;font-family:'Code Light';-inkscape-font-specification:'Code Light, ';letter-spacing:4.4979167px;stroke-width:0.07000434"
+           id="path856" />
+        <path
+           d="m 236.64264,271.06302 h 18.3896 v -0.8128 h -18.3896 v -16.5608 h 18.796 v -0.762 h -19.6088 v 35.50919 h 0.1016 19.6088 v -0.76199 h -18.8976 z"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50.79999924px;line-height:1.25;font-family:'Code Light';-inkscape-font-specification:'Code Light, ';letter-spacing:4.4979167px;stroke-width:0.07000434"
+           id="path858" />
+      </g>
+    </g>
+  </g>
+</svg>

@@ -55,7 +55,7 @@ a, p, h1, h2, ol {font-family: 'Open Sans','droid_sansregular', sans-serif;}
 
 .nav-icon-svg:hover path {
   transition: all 0.1s;
-  fill: #BEBEBE;
+  fill: #2C7873;
 }
 .nav-icon-svg-li:hover path {
   transition: all 0.1s;
@@ -73,8 +73,8 @@ a, p, h1, h2, ol {font-family: 'Open Sans','droid_sansregular', sans-serif;}
   padding-bottom: 2rem;
 }
 .banner-space{
-  height : 2.5rem;
-  padding-bottom: 4.5rem;
+  height : .5rem;
+  padding-bottom: 3rem;
 }
 .welcome-banner{
   background-color: #f5f5f5;
@@ -90,6 +90,9 @@ a, p, h1, h2, ol {font-family: 'Open Sans','droid_sansregular', sans-serif;}
   padding-top: .4rem;
   color: rgba(0, 0, 0, 0);
   filter: blur(10px);
+}
+#svg8{
+  background: rgba(245, 245, 245, .1);
 }
 .banner_text{
   height: 0px;
