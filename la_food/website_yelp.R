@@ -6,6 +6,7 @@ library(RMySQL)
 library(tidyr)
 library(scales)
 library(RColorBrewer)
+library(extrafont)
 
 data <- read_excel("lac_violation_data.xlsx", sheet="lac_violation_data")
 names(data) <- gsub(' ','_',names(data))
@@ -107,10 +108,6 @@ yelp_df <- yelp_df %>%
          weightedScore = (healthScore + (transfRate * transfRev)) / 2) %>%
   select(index:yelpZip,weightedScore)
 
-wsp <- yelp_df %>%
-  ggplot(aes(x=weightedScore)) +
-  geom_histogram(bins=60,colour="dodgerblue",fill="black") +
-  labs(x= "Weighted Score", y="Count")
 
 boxp1 <- yelp_df %>%
   select(weightedScore,yelpCat1:yelpCat3) %>%
@@ -212,28 +209,65 @@ yelp_df %>%
     theme_void() +
     guides(fill=FALSE)
 
-eq = function(x){x*x*x*x*x*x}
-eq2 = function(x){log(log(x))}
+eq = function(x){x*x*x}
+eq2 = function(x){log(x)}
 eq3 = function(x){62.2 + -.6121*x}
 eq4 = function(x){x}
 hsp <- ggplot(data.frame(x=c(50, 100)), aes(x=x)) + 
-  stat_function(fun=eq, geom="line") + 
-  labs(title="1. Health Score", y="", x="") +
-  theme(axis.text.y = element_blank(),plot.title = element_text(hjust = 0.5))
+  stat_function(fun=eq, geom="line", color = 'white') + 
+  labs(title="1. Health Score", y="Review Score Impact", x="") +
+  theme(axis.text.y = element_blank(),plot.title = element_text(hjust = 0.5),
+        axis.ticks.y = element_blank(),
+        text = element_text(family = 'Calibri', color = 'gray80'),
+        panel.background = element_rect(fill = '#211e1e', color = '#211e1e'),
+        plot.background = element_rect(fill = '#211e1e', color = '#211e1e'),
+        axis.text.x = element_text(color = 'gray80'),
+        axis.line.x = element_line(color = 'gray80'),
+        axis.line.y = element_line(color = 'gray80'),
+        axis.ticks.x = element_line(color = 'gray80'))
 rcp <- ggplot(data.frame(x=c(0, 10000)), aes(x=x)) + 
-  stat_function(fun=eq2, geom="line") + 
+  stat_function(fun=eq2, geom="line", color = 'white') + 
+  scale_x_continuous(labels = function(x) paste0(x/1000,'k'))+
   labs(title="4. Review Count", y="", x="") +
-  theme(axis.text.y = element_blank(),plot.title = element_text(hjust = 0.5))
+  theme(axis.text.y = element_blank(),plot.title = element_text(hjust = 0.5),
+        axis.ticks.y = element_blank(),
+        text = element_text(family = 'Calibri', color = 'gray80'),
+        panel.background = element_rect(fill = '#211e1e', color = '#211e1e'),
+        plot.background = element_rect(fill = '#211e1e', color = '#211e1e'),
+        axis.text.x = element_text(color = 'gray80'),
+        axis.line.x = element_line(color = 'gray80'),
+        axis.line.y = element_line(color = 'gray80'),
+        axis.ticks.x = element_line(color = 'gray80'))
 vcp <- ggplot(data.frame(x=c(0, 25)), aes(x=x)) + 
-  stat_function(fun=eq3, geom="line") + 
+  stat_function(fun=eq3, geom="line", color = 'white') + 
   labs(title="2. Violation Count", y="", x="") +
-  theme(axis.text.y = element_blank(),plot.title = element_text(hjust = 0.5))
+  theme(axis.text.y = element_blank(),plot.title = element_text(hjust = 0.5),
+        axis.ticks.y = element_blank(),
+        text = element_text(family = 'Calibri', color = 'gray80'),
+        panel.background = element_rect(fill = '#211e1e', color = '#211e1e'),
+        plot.background = element_rect(fill = '#211e1e', color = '#211e1e'),
+        axis.text.x = element_text(color = 'gray80'),
+        axis.line.x = element_line(color = 'gray80'),
+        axis.line.y = element_line(color = 'gray80'),
+        axis.ticks.x = element_line(color = 'gray80'))
 yrp <- ggplot(data.frame(x=c(0, 5)), aes(x=x)) + 
-  stat_function(fun=eq4, geom="line") + 
+  stat_function(fun=eq4, geom="line", color = 'white') + 
   labs(title="3. Yelp Rating", y="", x="") +
-  theme(axis.text.y = element_blank(),plot.title = element_text(hjust = 0.5))
+  theme(axis.text.y = element_blank(),plot.title = element_text(hjust = 0.5),
+        axis.ticks.y = element_blank(),
+        text = element_text(family = 'Calibri', color = 'gray80'),
+        panel.background = element_rect(fill = '#211e1e', color = '#211e1e'),
+        plot.background = element_rect(fill = '#211e1e', color = '#211e1e'),
+        axis.text.x = element_text(color = 'gray80'),
+        axis.line.x = element_line(color = 'gray80'),
+        axis.line.y = element_line(color = 'gray80'),
+        axis.ticks.x = element_line(color = 'gray80'))
 
-pgp <- plot_grid(hsp,vcp,yrp,rcp, align = "h", ncol = 4, rel_heights = c(.25,.25,.25,.25))
+final <- plot_grid(hsp,vcp,yrp,rcp, ncol=4)
+
+rel_widths = c(.245,.245,.245,.265)
+
+ggsave('bootstrap/img/food_metric.svg', final, device='svg', height = 3, width= 10)
 
 plot_grid(pgp,wsp, align = "v", nrow = 2, rel_heights = c(.3,.7))
 

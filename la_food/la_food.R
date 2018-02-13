@@ -3,7 +3,7 @@ library(ggplot2)
 library(extrafont)
 library(ggthemes)
 
-yelp <- read.csv('data/yelp_df_exp.csv', stringsAsFactors = F)
+yelp <- read.csv('la_food/data/yelp_df_exp.csv', stringsAsFactors = F)
 
 yelp <- yelp %>% 
   mutate(Parent = ifelse(Parent == 'U.K.', 'Other',
@@ -34,6 +34,23 @@ densitys <- yelp %>%
   labs(x = 'Weighted Score',y = '', fill = '')
 
 ggsave(file="density.svg", plot=densitys, width=8, height=4.5)
+
+food_hist <- yelp %>%
+  ggplot(aes(x=weightedScore)) +
+  geom_histogram(bins=60,colour="#211e1e",fill="deepskyblue2") +
+  scale_y_continuous(expand = c(0,0), limits = c(0,750), breaks = seq(0,750,150))+
+  labs(x= "Weighted Score", y="Count")+
+  theme(panel.background = element_rect(fill = '#211e1e', color = '#211e1e'),
+        plot.background = element_rect(fill = '#211e1e', color = '#211e1e'),
+        axis.text = element_text(color='gray80'),
+        axis.line.x = element_line(color = 'gray80'),
+        axis.line.y = element_line(color = 'gray80'),
+        axis.ticks.y = element_line(color = 'gray80'),
+        axis.ticks.x = element_line(color = 'gray80'),
+        plot.margin = margin(1,.4,.1,.1, unit = 'cm'),
+        text = element_text(color = 'gray80', family = 'Calibri', size = 14))
+
+ggsave('bootstrap/img/food_hist.svg', food_hist, device='svg', height = 3.5, width= 7)
 
 
 library(geojsonio)
