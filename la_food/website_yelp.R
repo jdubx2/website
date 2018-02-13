@@ -8,7 +8,7 @@ library(scales)
 library(RColorBrewer)
 library(extrafont)
 
-data <- read_excel("lac_violation_data.xlsx", sheet="lac_violation_data")
+data <- read_excel("la_food/data/lac_violation_data.xlsx", sheet="lac_violation_data")
 names(data) <- gsub(' ','_',names(data))
 data$SITE_ZIP <- as.character(data$SITE_ZIP)
 
@@ -34,9 +34,10 @@ scatter <- data3 %>%
 
 histo <- data3 %>%
   ggplot(aes(x=SCORE))+
-  geom_histogram(bins=40,colour="gray",fill="black")+
+  geom_histogram(bins=40,colour="gray",fill="deepskyblue2")+
   scale_x_continuous(breaks=c(seq(0,100,5))) +
-  labs(y="COUNT")
+  scale_y_continuous(breaks = seq(0,5000,1250), expand = c(0,0), limits = c(0,5500))+
+  labs(y="Count", x = '')
 
 theme_set(theme_gray())
 plot_grid(histo,scatter, align = "v", nrow = 2, rel_heights = c(1/3, 2/3))
