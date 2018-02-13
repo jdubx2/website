@@ -149,8 +149,11 @@
         <div class = 'img_box'>
           <img class = 'img_box_img' src = 'img/food_eda.png' />
         </div>
-
         <div class = 'text-input-box'>
+          <p>An interesting distribution. It looks like the vast majority of inspections result in a score of 90 or higher with a heavy concentration of scores
+            falling right at the 90 cutoff. There are a handful of scores in the 80-90 range and virtually no one score under 70 (probably the point at which
+            you're at risk of getting shut down). The strange spike at 90 and the inspections above 90 that deviate from the dominant linear trend leads me to believe
+            that there is some flexibility in the scoring and evaluation process.</p>
         <h2><b>Gathering More Data</b></h2>
         <p>After aggregating the dataset we are down to about 37k observations with the following six variables: Name,City,Zip,Score,Violations(count).
         I would like to add cuisine type to the dataset so that I can determine if certain cuisines tend to score hgher than others. Since manually
@@ -337,6 +340,9 @@ lm(<span style="color:#c1c144">data3</span><span style="color:#a1a1ff">$</span><
         <div class = 'text-input-box'>
           <p>Nice, now we have a normally distributed metric that can be used to determine which Los Angeles cuisines tend to serve up
             the tastiest food in the most sanitary environments.</p>
+        </div>
+        <div class = 'img_box'>
+          <img class = 'img_box_img' src = 'img/food_density.svg' />
         </div>
 
     </div>
