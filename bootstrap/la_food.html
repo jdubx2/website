@@ -143,19 +143,59 @@
         <div class = 'text-input-box'>
         <p>Since I'm interested in working with this data at the inspection level (slightly less granular than individual violations), the first step will be to
         aggregate each inspection by business name, location and assessed health score. I'll also add a "violations" variable to count the number of violations
-        an establishment has received. Since some locations have been inspected multiple times, I've decided to to keep only the most recent inspeciton in the
-        dataset. First, let's examine therelationship between health scores and violation counts.</p>
+        an establishment has received. Since some locations have been inspected multiple times, I've decided to to keep only the most recent inspection in the
+        dataset. First, let's examine the relationship between health scores and violation counts.</p>
+        </div>
+        <div class = 'code-chunk'>
+<pre style="background:#211e1e;color:#dadada">library(<span style="color:#c1c144">dplyr</span>)
+
+<span style="color:#c1c144">data</span> <span style="color:#47b8d6">&lt;-</span> read.csv(<span style="color:#ad9361">"lac_violation_data.csv"</span>)
+
+<span style="color:#c1c144">data</span> <span style="color:#47b8d6">&lt;-</span> <span style="color:#c1c144">data</span> %<span style="color:#47b8d6">></span>%
+  group_by(<span style="color:#c1c144">NAME</span>,<span style="color:#c1c144">ACTIVITY_DATE</span>,<span style="color:#c1c144">SITE_CITY</span>,<span style="color:#c1c144">SITE_ZIP</span>) %<span style="color:#47b8d6">></span>%
+  summarise(<span style="color:#c1c144">SCORE</span> <span style="color:#47b8d6">=</span> mean(<span style="color:#c1c144">SCORE</span>),
+            <span style="color:#c1c144">VIOLATIONS</span> <span style="color:#47b8d6">=</span> n()) %<span style="color:#47b8d6">></span>%
+  group_by(<span style="color:#c1c144">NAME</span>,<span style="color:#c1c144">SITE_CITY</span>,<span style="color:#c1c144">SITE_ZIP</span>) %<span style="color:#47b8d6">></span>%
+  arrange(desc(<span style="color:#c1c144">ACTIVITY_DATE</span>)) %<span style="color:#47b8d6">></span>%
+  slice(<span style="color:#ccc">1</span>) %<span style="color:#47b8d6">></span>%
+  select(<span style="color:#c1c144">NAME</span>,<span style="color:#c1c144">SITE_CITY</span><span style="color:#a1a1ff">:</span><span style="color:#c1c144">VIOLATIONS</span>)
+
+summary(lm(<span style="color:#c1c144">VIOLATIONS</span> <span style="color:#a1a1ff">~</span> <span style="color:#c1c144">SCORE</span>, <span style="color:#c1c144">data</span>=<span style="color:#c1c144">data</span>))
+</pre>
+</div>
+<div class = 'code-chunk'>
+<pre style="background:#211e1e;color:#dadada">Call:
+lm(formula = VIOLATIONS ~ SCORE, data = data3)
+
+Residuals:
+   Min     1Q Median     3Q    Max
+-6.230 -0.600 -0.109  0.564 31.678
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)
+(Intercept) 62.200104   0.191456   324.9   &lt;2e-16 ***
+SCORE       -0.612127   0.002039  -300.3   &lt;2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 1.407 on 37107 degrees of freedom
+Multiple R-squared:  0.7084,    Adjusted R-squared:  0.7084
+F-statistic: 9.015e+04 on 1 and 37107 DF,  p-value: &lt; 2.2e-16
+</pre>
         </div>
         <div class = 'img_box'>
           <img class = 'img_box_img' src = 'img/food_eda.png' />
         </div>
         <div class = 'text-input-box'>
           <p>An interesting distribution. It looks like the vast majority of inspections result in a score of 90 or higher with a heavy concentration of scores
-            falling right at the 90 cutoff. There are a handful of scores in the 80-90 range and virtually no one score under 70 (probably the point at which
-            you're at risk of getting shut down). The strange spike at 90 and the inspections above 90 that deviate from the dominant linear trend leads me to believe
+            falling right at the 90 cutoff. There are a handful of scores in the 80-90 range and virtually no one score under 75 (probably the point at which
+            you're at risk of getting shut down). The strange spike at 90 and the inspections with scores above 90 that deviate from the dominant linear trend leads me to believe
             that there is some flexibility in the scoring and evaluation process.</p>
         <h2><b>Gathering More Data</b></h2>
-        <p>After aggregating the dataset we are down to about 37k observations with the following six variables: Name,City,Zip,Score,Violations(count).
+        <p>After aggregating the dataset we are down to about 37k observations with the following six variables:
+          <br style = ' margin-top:10px; display:block; content: " ";'/ >
+          <span style = 'margin-left:15px;'>Name, City, Zip, Score, Violations</span>
+          <br style = ' margin-top:10px; display:block; content: " ";'/ >
         I would like to add cuisine type to the dataset so that I can determine if certain cuisines tend to score hgher than others. Since manually
         reviewing 37k different places to add cuisine labels is out of the question, I turned to Yelp's API for help. Yelp's business categorization
         labels are exactly what I'm looking for and even though I may only be able to retrieve a subset of the entire dataset, it's defintely more
@@ -340,11 +380,27 @@ lm(<span style="color:#c1c144">data3</span><span style="color:#a1a1ff">$</span><
         <div class = 'text-input-box'>
           <p>Nice, now we have a normally distributed metric that can be used to determine which Los Angeles cuisines tend to serve up
             the tastiest food in the most sanitary environments.</p>
+          <h2><b>Visualizing the Results</b></h2>
+          <p>
+            Now I'll compare the scores of a variety of cuisine types by plotting density distributions. The mean weighted score is approximately
+            0.4 so I'll draw a vertical line on each density plot to make comparison easier. Distributions concentrated to the right of the line should
+            indicate higher scoring cuisines and distributions concentrated to the left should indicate lower scoring cuisines on average. The plotting code
+            for the image below and all other graphics in this analysis can be viewed on <a href = 'https://github.com/jdubx2/website/blob/master/la_food/la_food.R' target= '_blank'>github</a>.
+          </p>
         </div>
         <div class = 'img_box'>
           <img class = 'img_box_img' src = 'img/food_density.svg' />
         </div>
-
+        <div class='text-input-box'>
+          <p>Interesting! European cuisines like Greek, French and Spanish seem to score  a little higher than average
+          while many asian cusines tend to have lower scores on average. Asian fusion and Japanese are exceptions to this observation
+          with realtively standard looking distributions. Overall, Greek and Healthy establishments tend to score the highest using this metric while Markets
+        and Southeast Asian food have the lowest average scores.</p>
+        <p>Let's wrap up this analysis by mapping the data to see if this new scoring metric reveals any regional trends.</p>
+        </div>
+      <div class='img_box' style = 'width:86.5%;'>
+        <iframe scrolling="no" class = 'map_iframe' frameBorder="0" width = 100% src="http://quickviz.live/food_map/food_map.html"></iframe>
+      </div>
     </div>
     </div>
     <!-- /.container -->
@@ -362,6 +418,9 @@ lm(<span style="color:#c1c144">data3</span><span style="color:#a1a1ff">$</span><
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <script src="vendor/bootstrap/js/newjs.js"></script>
+    <script type="text/javascript" language="javascript">
+    $('.map_iframe').css('height', $(window).height() * .8 +'px');
+    </script>
 
   </body>
 
