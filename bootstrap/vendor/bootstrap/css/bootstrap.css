@@ -5191,9 +5191,9 @@ button.close {
   word-spacing: normal;
   white-space: normal;
   line-break: auto;
-  font-size: 0.875rem;
+  font-size: 0.775rem;
   word-wrap: break-word;
-  opacity: 0;
+  opacity: 1;
 }
 
 .tooltip.show {

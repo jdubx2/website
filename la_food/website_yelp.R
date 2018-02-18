@@ -30,9 +30,10 @@ summary(lm(VIOLATIONS ~ SCORE, data=data3))
 scatter <- data3 %>%
   ggplot(aes(x=VIOLATIONS,y=SCORE))+
   geom_jitter(alpha=.1,width=.2,height=.5, color = 'deepskyblue2', size = .5) +
-  # geom_smooth(method='lm', se=F, color = 'darkolivegreen2', linetype='dashed') +
-  scale_y_continuous(breaks=c(seq(70,100,10)), limits = c(70,100)) +
-  scale_x_continuous(breaks=c(seq(0,30,5)), limits = c(0,30))+
+   geom_smooth(method='lm', se=F, color = 'darkolivegreen2', linetype='dashed', size = .5) +
+   geom_text(aes(x=17,y=82,label='R² .71'), color = 'darkolivegreen2', family = 'Calibri', size=4.5) +
+  scale_y_continuous(breaks=c(seq(75,100,5)), limits = c(75,100)) +
+  scale_x_continuous(breaks=c(seq(0,20,5)), limits = c(0,20))+
   theme(panel.background = element_rect(fill = '#211e1e', color = '#211e1e'),
         plot.background = element_rect(fill = '#211e1e', color = '#211e1e'),
         axis.text = element_text(color='gray80', size = 16),
@@ -41,7 +42,7 @@ scatter <- data3 %>%
         axis.title.x = element_text(margin = margin(.6,0,0,0, unit = 'cm')),
         axis.ticks.y = element_line(color = 'gray80'),
         axis.ticks.x = element_line(color = 'gray80'),
-        plot.margin = margin(0,0,.7,.7, unit = 'cm'),
+        plot.margin = margin(.7,0,.7,.7, unit = 'cm'),
         # panel.grid.major.y = element_line(color = 'gray25', size = .1),
         text = element_text(color = 'gray80', family = 'Calibri', size = 18))+
   labs(x = 'Number of Violations', y = 'Health Score')
@@ -49,30 +50,30 @@ scatter <- data3 %>%
 histo <- data3 %>%
   ggplot(aes(x=VIOLATIONS))+
   geom_histogram(bins=35,colour="#211e1e",fill="deepskyblue2")+
-  scale_x_continuous(breaks=c(seq(0,30,5))) +
-  scale_y_continuous(breaks = seq(0,6000,6000), expand = c(0,0), limits = c(0,6200), 
+  scale_x_continuous(breaks=c(seq(0,20,5))) +
+  scale_y_continuous(breaks = seq(0,6000,3000), expand = c(0,0), limits = c(0,6200), 
                      labels = function(x) ifelse(x!=0, paste0(x/1000,'k'),0))+
-  labs(y="Count", x = '')+
+  labs(y="Count", x = 'Number of Violations')+
   theme(panel.background = element_rect(fill = '#211e1e', color = '#211e1e'),
         plot.background = element_rect(fill = '#211e1e', color = '#211e1e'),
         axis.text = element_text(color='gray80', size = 16),
         axis.line.x = element_line(color = 'gray80'),
         axis.line.y = element_line(color = 'gray80'),
-        axis.title.y = element_text(margin = margin(0,.6,0,0, unit = 'cm')),
+        axis.title.x = element_text(margin = margin(.6,0,0,0, unit = 'cm')),
         axis.ticks.y = element_line(color = 'gray80'),
         axis.ticks.x = element_line(color = 'gray80'),
-        plot.margin = margin(1,0,0,.7, unit = 'cm'),
+        plot.margin = margin(.7,.7,.7,.7, unit = 'cm'),
         # panel.grid.major.y = element_line(color = 'gray25', size = .1),
         text = element_text(color = 'gray80', family = 'Calibri', size = 18)) +
-  coord_cartesian(xlim = c(0,30))
+  coord_cartesian(xlim = c(0,20))
 
 histo2 <- data3 %>% 
   ggplot(aes(x=SCORE))+
   geom_histogram(bins=40,colour="#211e1e",fill="deepskyblue2")+
-  scale_x_continuous(breaks=c(seq(70,100,10))) +
-  scale_y_continuous(breaks = seq(0,6000,6000), expand = c(0,0), limits = c(0,6500), 
+  scale_x_continuous(breaks=c(seq(75,100,5))) +
+  scale_y_continuous(breaks = seq(0,6000,3000), expand = c(0,0), limits = c(0,6500), 
                      labels = function(x) ifelse(x!=0, paste0(x/1000,'k'),0))+
-  labs(y="Count", x = '')+
+  labs(y="Count", x = 'Health Score')+
   theme(panel.background = element_rect(fill = '#211e1e', color = '#211e1e'),
         plot.background = element_rect(fill = '#211e1e', color = '#211e1e'),
         axis.text = element_text(color='gray80', size = 16),
@@ -81,10 +82,11 @@ histo2 <- data3 %>%
         axis.ticks.y = element_line(color = 'gray80'),
         axis.title.x = element_text(margin = margin(.6,0,0,0, unit = 'cm')),
         axis.ticks.x = element_line(color = 'gray80'),
-        plot.margin = margin(0,.7,.7,0, unit = 'cm'),
+        plot.margin = margin(.7,.7,.7,.7, unit = 'cm'),
         # panel.grid.major.y = element_line(color = 'gray25', size = .1),
         text = element_text(color = 'gray80', family = 'Calibri', size = 18)) +
-  coord_flip(xlim = c(70,100))
+  # coord_flip(xlim = c(75,100))
+  coord_cartesian(xlim = c(75,100))
 
 # plot_grid(histo,scatter, align = "v", nrow = 2, rel_heights = c(1/3, 2/3))
 # 
@@ -92,9 +94,9 @@ histo2 <- data3 %>%
 # 
 # plot_grid(p1, histo2, ncol = 2, rel_widths = c(2/3,1/3), rel_heights = c(2/3,1/3))
 
-ggsave('la_food/eda_1.png', scatter, device='png', height = 3.5, width= 7)
-ggsave('la_food/eda_2.png', histo, device='png', height = 1.5, width= 7)
-ggsave('la_food/eda_3.png', histo2, device='png', height = 3.5, width= 1.5)
+ggsave('la_food/eda_1.png', scatter, device='png', height = 5, width= 6)
+ggsave('la_food/eda_2.png', histo, device='png', height = 2.5, width= 5)
+ggsave('la_food/eda_3.png', histo2, device='png', height = 2.5, width= 5)
 
 ############################################################################
 

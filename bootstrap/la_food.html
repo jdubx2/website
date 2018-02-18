@@ -21,6 +21,16 @@
 
     <link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
 
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-92041039-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-92041039-1');
+    </script>
+
   </head>
 
   <body>
@@ -396,7 +406,7 @@ lm(<span style="color:#c1c144">data3</span><span style="color:#a1a1ff">$</span><
           while many asian cusines tend to have lower scores on average. Asian fusion and Japanese are exceptions to this observation
           with realtively standard looking distributions. Overall, Greek and Healthy establishments tend to score the highest using this metric while Markets
         and Southeast Asian food have the lowest average scores.</p>
-        <p>Let's wrap up this analysis by mapping the data to see if this new scoring metric reveals any regional trends.</p>
+        <p>Let's wrap up this analysis by mapping the data colored by score to see if this new metric reveals any regional trends.</p>
         </div>
       <div class='img_box' style = 'width:86.5%;'>
         <iframe scrolling="no" class = 'map_iframe' frameBorder="0" width = 100% src="http://quickviz.live/food_map/food_map.html"></iframe>
